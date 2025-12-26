@@ -2,7 +2,7 @@
 //  TrackerUITestsLaunchTests.swift
 //  TrackerUITests
 //
-//  Created by Никита Полойников on 27.12.2025.
+//  Created by Никита Полойников on 18.11.2025.
 //
 
 import XCTest

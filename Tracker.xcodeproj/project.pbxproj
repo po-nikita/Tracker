@@ -7,53 +7,53 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		310AFBDA2EFF49FD007BF0D6 /* PBXContainerItemProxy */ = {
+		31C970202ECCDD9B00DFDDD2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 310AFBB82EFF49FC007BF0D6 /* Project object */;
+			containerPortal = 31C96FFE2ECCDD9900DFDDD2 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 310AFBBF2EFF49FC007BF0D6;
+			remoteGlobalIDString = 31C970052ECCDD9900DFDDD2;
 			remoteInfo = Tracker;
 		};
-		310AFBE42EFF49FD007BF0D6 /* PBXContainerItemProxy */ = {
+		31C9702A2ECCDD9B00DFDDD2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 310AFBB82EFF49FC007BF0D6 /* Project object */;
+			containerPortal = 31C96FFE2ECCDD9900DFDDD2 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 310AFBBF2EFF49FC007BF0D6;
+			remoteGlobalIDString = 31C970052ECCDD9900DFDDD2;
 			remoteInfo = Tracker;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		310AFBC02EFF49FC007BF0D6 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		310AFBD92EFF49FD007BF0D6 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		310AFBE32EFF49FD007BF0D6 /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31C970062ECCDD9900DFDDD2 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		31C9701F2ECCDD9B00DFDDD2 /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31C970292ECCDD9B00DFDDD2 /* TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		310AFBEB2EFF49FD007BF0D6 /* Exceptions for "Tracker" folder in "Tracker" target */ = {
+		31C970312ECCDD9B00DFDDD2 /* Exceptions for "Tracker" folder in "Tracker" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 310AFBBF2EFF49FC007BF0D6 /* Tracker */;
+			target = 31C970052ECCDD9900DFDDD2 /* Tracker */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		310AFBC22EFF49FC007BF0D6 /* Tracker */ = {
+		31C970082ECCDD9900DFDDD2 /* Tracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				310AFBEB2EFF49FD007BF0D6 /* Exceptions for "Tracker" folder in "Tracker" target */,
+				31C970312ECCDD9B00DFDDD2 /* Exceptions for "Tracker" folder in "Tracker" target */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
 		};
-		310AFBDC2EFF49FD007BF0D6 /* TrackerTests */ = {
+		31C970222ECCDD9B00DFDDD2 /* TrackerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerTests;
 			sourceTree = "<group>";
 		};
-		310AFBE62EFF49FD007BF0D6 /* TrackerUITests */ = {
+		31C9702C2ECCDD9B00DFDDD2 /* TrackerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TrackerUITests;
 			sourceTree = "<group>";
@@ -61,21 +61,21 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		310AFBBD2EFF49FC007BF0D6 /* Frameworks */ = {
+		31C970032ECCDD9900DFDDD2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBD62EFF49FD007BF0D6 /* Frameworks */ = {
+		31C9701C2ECCDD9B00DFDDD2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBE02EFF49FD007BF0D6 /* Frameworks */ = {
+		31C970262ECCDD9B00DFDDD2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -85,22 +85,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		310AFBB72EFF49FC007BF0D6 = {
+		31C96FFD2ECCDD9900DFDDD2 = {
 			isa = PBXGroup;
 			children = (
-				310AFBC22EFF49FC007BF0D6 /* Tracker */,
-				310AFBDC2EFF49FD007BF0D6 /* TrackerTests */,
-				310AFBE62EFF49FD007BF0D6 /* TrackerUITests */,
-				310AFBC12EFF49FC007BF0D6 /* Products */,
+				31C970082ECCDD9900DFDDD2 /* Tracker */,
+				31C970222ECCDD9B00DFDDD2 /* TrackerTests */,
+				31C9702C2ECCDD9B00DFDDD2 /* TrackerUITests */,
+				31C970072ECCDD9900DFDDD2 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		310AFBC12EFF49FC007BF0D6 /* Products */ = {
+		31C970072ECCDD9900DFDDD2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				310AFBC02EFF49FC007BF0D6 /* Tracker.app */,
-				310AFBD92EFF49FD007BF0D6 /* TrackerTests.xctest */,
-				310AFBE32EFF49FD007BF0D6 /* TrackerUITests.xctest */,
+				31C970062ECCDD9900DFDDD2 /* Tracker.app */,
+				31C9701F2ECCDD9B00DFDDD2 /* TrackerTests.xctest */,
+				31C970292ECCDD9B00DFDDD2 /* TrackerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,134 +108,134 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		310AFBBF2EFF49FC007BF0D6 /* Tracker */ = {
+		31C970052ECCDD9900DFDDD2 /* Tracker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 310AFBEC2EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "Tracker" */;
+			buildConfigurationList = 31C970322ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "Tracker" */;
 			buildPhases = (
-				310AFBBC2EFF49FC007BF0D6 /* Sources */,
-				310AFBBD2EFF49FC007BF0D6 /* Frameworks */,
-				310AFBBE2EFF49FC007BF0D6 /* Resources */,
+				31C970022ECCDD9900DFDDD2 /* Sources */,
+				31C970032ECCDD9900DFDDD2 /* Frameworks */,
+				31C970042ECCDD9900DFDDD2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				310AFBC22EFF49FC007BF0D6 /* Tracker */,
+				31C970082ECCDD9900DFDDD2 /* Tracker */,
 			);
 			name = Tracker;
 			packageProductDependencies = (
 			);
 			productName = Tracker;
-			productReference = 310AFBC02EFF49FC007BF0D6 /* Tracker.app */;
+			productReference = 31C970062ECCDD9900DFDDD2 /* Tracker.app */;
 			productType = "com.apple.product-type.application";
 		};
-		310AFBD82EFF49FD007BF0D6 /* TrackerTests */ = {
+		31C9701E2ECCDD9B00DFDDD2 /* TrackerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 310AFBF12EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "TrackerTests" */;
+			buildConfigurationList = 31C970372ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "TrackerTests" */;
 			buildPhases = (
-				310AFBD52EFF49FD007BF0D6 /* Sources */,
-				310AFBD62EFF49FD007BF0D6 /* Frameworks */,
-				310AFBD72EFF49FD007BF0D6 /* Resources */,
+				31C9701B2ECCDD9B00DFDDD2 /* Sources */,
+				31C9701C2ECCDD9B00DFDDD2 /* Frameworks */,
+				31C9701D2ECCDD9B00DFDDD2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				310AFBDB2EFF49FD007BF0D6 /* PBXTargetDependency */,
+				31C970212ECCDD9B00DFDDD2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				310AFBDC2EFF49FD007BF0D6 /* TrackerTests */,
+				31C970222ECCDD9B00DFDDD2 /* TrackerTests */,
 			);
 			name = TrackerTests;
 			packageProductDependencies = (
 			);
 			productName = TrackerTests;
-			productReference = 310AFBD92EFF49FD007BF0D6 /* TrackerTests.xctest */;
+			productReference = 31C9701F2ECCDD9B00DFDDD2 /* TrackerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		310AFBE22EFF49FD007BF0D6 /* TrackerUITests */ = {
+		31C970282ECCDD9B00DFDDD2 /* TrackerUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 310AFBF42EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "TrackerUITests" */;
+			buildConfigurationList = 31C9703A2ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "TrackerUITests" */;
 			buildPhases = (
-				310AFBDF2EFF49FD007BF0D6 /* Sources */,
-				310AFBE02EFF49FD007BF0D6 /* Frameworks */,
-				310AFBE12EFF49FD007BF0D6 /* Resources */,
+				31C970252ECCDD9B00DFDDD2 /* Sources */,
+				31C970262ECCDD9B00DFDDD2 /* Frameworks */,
+				31C970272ECCDD9B00DFDDD2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				310AFBE52EFF49FD007BF0D6 /* PBXTargetDependency */,
+				31C9702B2ECCDD9B00DFDDD2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				310AFBE62EFF49FD007BF0D6 /* TrackerUITests */,
+				31C9702C2ECCDD9B00DFDDD2 /* TrackerUITests */,
 			);
 			name = TrackerUITests;
 			packageProductDependencies = (
 			);
 			productName = TrackerUITests;
-			productReference = 310AFBE32EFF49FD007BF0D6 /* TrackerUITests.xctest */;
+			productReference = 31C970292ECCDD9B00DFDDD2 /* TrackerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		310AFBB82EFF49FC007BF0D6 /* Project object */ = {
+		31C96FFE2ECCDD9900DFDDD2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					310AFBBF2EFF49FC007BF0D6 = {
+					31C970052ECCDD9900DFDDD2 = {
 						CreatedOnToolsVersion = 16.2;
 					};
-					310AFBD82EFF49FD007BF0D6 = {
+					31C9701E2ECCDD9B00DFDDD2 = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 310AFBBF2EFF49FC007BF0D6;
+						TestTargetID = 31C970052ECCDD9900DFDDD2;
 					};
-					310AFBE22EFF49FD007BF0D6 = {
+					31C970282ECCDD9B00DFDDD2 = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 310AFBBF2EFF49FC007BF0D6;
+						TestTargetID = 31C970052ECCDD9900DFDDD2;
 					};
 				};
 			};
-			buildConfigurationList = 310AFBBB2EFF49FC007BF0D6 /* Build configuration list for PBXProject "Tracker" */;
+			buildConfigurationList = 31C970012ECCDD9900DFDDD2 /* Build configuration list for PBXProject "Tracker" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 310AFBB72EFF49FC007BF0D6;
+			mainGroup = 31C96FFD2ECCDD9900DFDDD2;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 310AFBC12EFF49FC007BF0D6 /* Products */;
+			productRefGroup = 31C970072ECCDD9900DFDDD2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				310AFBBF2EFF49FC007BF0D6 /* Tracker */,
-				310AFBD82EFF49FD007BF0D6 /* TrackerTests */,
-				310AFBE22EFF49FD007BF0D6 /* TrackerUITests */,
+				31C970052ECCDD9900DFDDD2 /* Tracker */,
+				31C9701E2ECCDD9B00DFDDD2 /* TrackerTests */,
+				31C970282ECCDD9B00DFDDD2 /* TrackerUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		310AFBBE2EFF49FC007BF0D6 /* Resources */ = {
+		31C970042ECCDD9900DFDDD2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBD72EFF49FD007BF0D6 /* Resources */ = {
+		31C9701D2ECCDD9B00DFDDD2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBE12EFF49FD007BF0D6 /* Resources */ = {
+		31C970272ECCDD9B00DFDDD2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -245,21 +245,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		310AFBBC2EFF49FC007BF0D6 /* Sources */ = {
+		31C970022ECCDD9900DFDDD2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBD52EFF49FD007BF0D6 /* Sources */ = {
+		31C9701B2ECCDD9B00DFDDD2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		310AFBDF2EFF49FD007BF0D6 /* Sources */ = {
+		31C970252ECCDD9B00DFDDD2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -269,20 +269,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		310AFBDB2EFF49FD007BF0D6 /* PBXTargetDependency */ = {
+		31C970212ECCDD9B00DFDDD2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 310AFBBF2EFF49FC007BF0D6 /* Tracker */;
-			targetProxy = 310AFBDA2EFF49FD007BF0D6 /* PBXContainerItemProxy */;
+			target = 31C970052ECCDD9900DFDDD2 /* Tracker */;
+			targetProxy = 31C970202ECCDD9B00DFDDD2 /* PBXContainerItemProxy */;
 		};
-		310AFBE52EFF49FD007BF0D6 /* PBXTargetDependency */ = {
+		31C9702B2ECCDD9B00DFDDD2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 310AFBBF2EFF49FC007BF0D6 /* Tracker */;
-			targetProxy = 310AFBE42EFF49FD007BF0D6 /* PBXContainerItemProxy */;
+			target = 31C970052ECCDD9900DFDDD2 /* Tracker */;
+			targetProxy = 31C9702A2ECCDD9B00DFDDD2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		310AFBED2EFF49FD007BF0D6 /* Debug */ = {
+		31C970332ECCDD9B00DFDDD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -294,9 +294,9 @@
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -310,7 +310,7 @@
 			};
 			name = Debug;
 		};
-		310AFBEE2EFF49FD007BF0D6 /* Release */ = {
+		31C970342ECCDD9B00DFDDD2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -322,9 +322,9 @@
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -338,7 +338,7 @@
 			};
 			name = Release;
 		};
-		310AFBEF2EFF49FD007BF0D6 /* Debug */ = {
+		31C970352ECCDD9B00DFDDD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -401,7 +401,7 @@
 			};
 			name = Debug;
 		};
-		310AFBF02EFF49FD007BF0D6 /* Release */ = {
+		31C970362ECCDD9B00DFDDD2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -457,7 +457,7 @@
 			};
 			name = Release;
 		};
-		310AFBF22EFF49FD007BF0D6 /* Debug */ = {
+		31C970382ECCDD9B00DFDDD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -476,7 +476,7 @@
 			};
 			name = Debug;
 		};
-		310AFBF32EFF49FD007BF0D6 /* Release */ = {
+		31C970392ECCDD9B00DFDDD2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -495,7 +495,7 @@
 			};
 			name = Release;
 		};
-		310AFBF52EFF49FD007BF0D6 /* Debug */ = {
+		31C9703B2ECCDD9B00DFDDD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -512,7 +512,7 @@
 			};
 			name = Debug;
 		};
-		310AFBF62EFF49FD007BF0D6 /* Release */ = {
+		31C9703C2ECCDD9B00DFDDD2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -532,43 +532,43 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		310AFBBB2EFF49FC007BF0D6 /* Build configuration list for PBXProject "Tracker" */ = {
+		31C970012ECCDD9900DFDDD2 /* Build configuration list for PBXProject "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				310AFBEF2EFF49FD007BF0D6 /* Debug */,
-				310AFBF02EFF49FD007BF0D6 /* Release */,
+				31C970352ECCDD9B00DFDDD2 /* Debug */,
+				31C970362ECCDD9B00DFDDD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		310AFBEC2EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "Tracker" */ = {
+		31C970322ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				310AFBED2EFF49FD007BF0D6 /* Debug */,
-				310AFBEE2EFF49FD007BF0D6 /* Release */,
+				31C970332ECCDD9B00DFDDD2 /* Debug */,
+				31C970342ECCDD9B00DFDDD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		310AFBF12EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "TrackerTests" */ = {
+		31C970372ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "TrackerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				310AFBF22EFF49FD007BF0D6 /* Debug */,
-				310AFBF32EFF49FD007BF0D6 /* Release */,
+				31C970382ECCDD9B00DFDDD2 /* Debug */,
+				31C970392ECCDD9B00DFDDD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		310AFBF42EFF49FD007BF0D6 /* Build configuration list for PBXNativeTarget "TrackerUITests" */ = {
+		31C9703A2ECCDD9B00DFDDD2 /* Build configuration list for PBXNativeTarget "TrackerUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				310AFBF52EFF49FD007BF0D6 /* Debug */,
-				310AFBF62EFF49FD007BF0D6 /* Release */,
+				31C9703B2ECCDD9B00DFDDD2 /* Debug */,
+				31C9703C2ECCDD9B00DFDDD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 310AFBB82EFF49FC007BF0D6 /* Project object */;
+	rootObject = 31C96FFE2ECCDD9900DFDDD2 /* Project object */;
 }
