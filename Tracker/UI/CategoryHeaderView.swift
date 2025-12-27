@@ -13,12 +13,12 @@ final class CategoryHeaderView: UICollectionReusableView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-                    titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24), 
-                    titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
-                ])
-            }
-            
-            required init?(coder: NSCoder) {
-                fatalError("init(coder:) has not been implemented")
-            }
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24), 
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

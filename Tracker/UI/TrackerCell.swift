@@ -2,7 +2,7 @@ import UIKit
 
 final class TrackerCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
-
+    
     // MARK: UI
     private let cardView = UIView()
     private let emojiLabel = UILabel()
@@ -13,7 +13,7 @@ final class TrackerCell: UICollectionViewCell {
     private let actionButton = UIButton()
     var onCompleteTapped: ((UUID) -> Void)?
     var trackerID: UUID?
-
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,8 +27,8 @@ final class TrackerCell: UICollectionViewCell {
     
     @objc private func completeButtonTapped() {
         guard let trackerID else { return }
-               onCompleteTapped?(trackerID)
-           }
+        onCompleteTapped?(trackerID)
+    }
     
     //MARK: Setup
     private func setupViews() {
@@ -92,23 +92,23 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.text = tracker.emoji
         cardView.backgroundColor = .systemGreen
         daysLabel.text = "\(completedCount) \(dayWord(for: completedCount))"
-
+        
         let imageName = isCompleted ? "checkmark" : "plus"
         actionButton.setImage(UIImage(systemName: imageName), for: .normal)
         actionButton.backgroundColor = .systemGreen
     }
-
+    
     
     private func dayWord(for count: Int) -> String {
         if count % 10 == 1 && count % 100 != 11 {
             return "день"
         }
-
+        
         if (2...4).contains(count % 10) && !(12...14).contains(count % 100) {
             return "дня"
         }
-
+        
         return "дней"
     }
-
+    
 }

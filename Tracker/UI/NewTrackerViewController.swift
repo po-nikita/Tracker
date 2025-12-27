@@ -15,7 +15,7 @@ final class NewTrackerViewController: UIViewController {
     private let createButton = UIButton()
     private let scheduleDescriptionLabel = UILabel()
     private var scheduleDescriptionTopConstraint: NSLayoutConstraint!
-
+    
     var onCreate: ((Tracker) -> Void)?
     private var selectedWeekDays: [Weekday] = []
     private var optionsTopConstraint: NSLayoutConstraint!
@@ -30,7 +30,7 @@ final class NewTrackerViewController: UIViewController {
         setupErrorLabel()
         setupOptionsContainer()
         setupScheduleDescriptionLabel()
-
+        
         setupLayout()
     }
     
@@ -89,7 +89,7 @@ final class NewTrackerViewController: UIViewController {
         config.contentInsets = .zero
         config.titlePadding = 0
         scheduleButton.configuration = config
-
+        
         
         separatorView.backgroundColor = .systemGray4
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -159,7 +159,7 @@ final class NewTrackerViewController: UIViewController {
         scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         optionsContainerView.addSubview(scheduleDescriptionLabel)
     }
-
+    
     
     // MARK: Layout
     
@@ -170,7 +170,7 @@ final class NewTrackerViewController: UIViewController {
             equalTo: scheduleButton.titleLabel!.bottomAnchor,
             constant: 4
         )
-
+        
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -192,7 +192,7 @@ final class NewTrackerViewController: UIViewController {
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-
+            
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             createButton.heightAnchor.constraint(equalTo: cancelButton.heightAnchor),
@@ -202,18 +202,17 @@ final class NewTrackerViewController: UIViewController {
             scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
             scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
             scheduleDescriptionTopConstraint
-            ])
+        ])
     }
     
-// MARK: Кнопка расписания
+    // MARK: Кнопка расписания
     @objc private func scheduleButtonTapped() {
         let scheduleVc = ScheduleViewController()
         // подписываемся на результат
         scheduleVc.onDone = {[weak self] selectedDays in // когда контроллер вызовет onDone, выполнится этот код
-            guard let self else {return}
-            self.selectedWeekDays = selectedDays.sorted { $0.rawValue < $1.rawValue }
-            self.updateScheduleLabel()
-            self.updateCreateButtonState()
+            self?.selectedWeekDays = selectedDays.sorted { $0.rawValue < $1.rawValue }
+            self?.updateScheduleLabel()
+            self?.updateCreateButtonState()
         }
         scheduleVc.modalPresentationStyle = .pageSheet // шторка снизу
         if let sheet = scheduleVc.sheetPresentationController {
@@ -227,25 +226,25 @@ final class NewTrackerViewController: UIViewController {
     private func updateScheduleLabel() {
         guard !selectedWeekDays.isEmpty else {
             scheduleDescriptionLabel.isHidden = true
-
+            
             scheduleButton.contentVerticalAlignment = .center
             setScheduleButtonInsets(top: 0)
-
+            
             return
         }
-
+        
         let text = selectedWeekDays
             .map { $0.shortTitle }
             .joined(separator: ", ")
-
+        
         scheduleDescriptionLabel.text = text
         scheduleDescriptionLabel.isHidden = false
-
+        
         scheduleButton.contentVerticalAlignment = .top
         setScheduleButtonInsets(top: 14)
     }
-
-
+    
+    
     private func setScheduleButtonInsets(top: CGFloat) {
         var config = scheduleButton.configuration ?? .plain()
         config.contentInsets = NSDirectionalEdgeInsets(
@@ -256,12 +255,12 @@ final class NewTrackerViewController: UIViewController {
         )
         scheduleButton.configuration = config
     }
-
+    
     
     @objc private func createButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard !selectedWeekDays.isEmpty else { return }
-
+        
         let tracker = Tracker(
             id: UUID(),
             name: name,
@@ -269,14 +268,14 @@ final class NewTrackerViewController: UIViewController {
             emoji: "🔥",
             schedule: selectedWeekDays
         )
-
+        
         print("Создан трекер:", tracker)
-
+        
         onCreate?(tracker)  
-
+        
         dismiss(animated: true)
     }
-
+    
     private func updateCreateButtonState() {
         let isNameValid = !(nameTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
         let hasSelectedDays = !selectedWeekDays.isEmpty
@@ -286,7 +285,7 @@ final class NewTrackerViewController: UIViewController {
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .black : .systemGray
     }
-
+    
 }
 
 extension NewTrackerViewController: UITextFieldDelegate {
@@ -310,8 +309,6 @@ extension NewTrackerViewController: UITextFieldDelegate {
             self?.updateCreateButtonState()
         }
         
-        
-        
         return isWithinLimit
     }
     
@@ -326,6 +323,4 @@ extension NewTrackerViewController: UITextFieldDelegate {
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
-    
-
 }

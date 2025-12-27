@@ -20,12 +20,12 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupTitle() {
-          titleLabel.text = "Расписание"
-          titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
-          titleLabel.textAlignment = .center
-          titleLabel.translatesAutoresizingMaskIntoConstraints = false
-          view.addSubview(titleLabel)
-      }
+        titleLabel.text = "Расписание"
+        titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(titleLabel)
+    }
     
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,18 +37,18 @@ final class ScheduleViewController: UIViewController {
         tableView.delegate = self // Контроллер отвечает за поведение таблицы.
         tableView.rowHeight = 75
         tableView.register(WeekdayCell.self, forCellReuseIdentifier: WeekdayCell.reuseIdentifier) //Регистрируем кастомную ячейку.
-    
+        
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 16
         tableView.clipsToBounds = true
         
         tableView.separatorStyle = .singleLine
         tableView.separatorColor = .systemGray
-            
+        
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-            
+        
         tableView.cellLayoutMarginsFollowReadableWidth = false
-            
+        
     }
     
     private func setupDoneButton() {
@@ -72,7 +72,7 @@ final class ScheduleViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.heightAnchor.constraint(equalToConstant: 525),
-        
+            
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant:  20),
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),

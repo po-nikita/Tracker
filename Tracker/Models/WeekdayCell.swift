@@ -17,17 +17,15 @@ final class WeekdayCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-   
-
     private func setupUI() {
         selectionStyle = .none
         
         contentView.backgroundColor = .systemGray6
         backgroundColor = .systemGray6
-
+        
         daySwitch.onTintColor = .systemBlue
         daySwitch.tintColor = .systemBlue
-
+        
         titleLabel.font = .systemFont(ofSize: 17)
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -42,7 +40,7 @@ final class WeekdayCell: UITableViewCell {
     func configure(day: Weekday, isOn: Bool) { // Метод для настройки ячейки извне.
         titleLabel.text = day.title // Берём название дня из enum.
         daySwitch.isOn = isOn //Устанавливаем состояние переключателя.
-
+        
     }
     
     @objc private func switchChanged() {
