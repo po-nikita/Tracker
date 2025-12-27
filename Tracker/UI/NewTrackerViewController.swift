@@ -122,11 +122,11 @@ final class NewTrackerViewController: UIViewController {
     
     private func setupCancelButton() {
         cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.setTitleColor(.red, for: .normal)
+        cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         cancelButton.backgroundColor = .clear
         cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.red.cgColor
+        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
         cancelButton.layer.cornerRadius = 16
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
