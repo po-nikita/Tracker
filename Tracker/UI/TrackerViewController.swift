@@ -125,6 +125,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyLabel)
         emptyLabel.text = "Что будем отслеживать?"
+        emptyLabel.font = .systemFont(ofSize: 12)
     }
     
     private func setupConstrait() {
