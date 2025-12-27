@@ -14,7 +14,8 @@ final class NewTrackerViewController: UIViewController {
     private let cancelButton = UIButton()
     private let createButton = UIButton()
     private let scheduleDescriptionLabel = UILabel()
-    
+    private var scheduleDescriptionTopConstraint: NSLayoutConstraint!
+
     var onCreate: ((Tracker) -> Void)?
     private var selectedWeekDays: [Weekday] = []
     private var optionsTopConstraint: NSLayoutConstraint!
@@ -84,6 +85,11 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.addTarget(self, action: #selector(scheduleButtonTapped), for: .touchUpInside)
         scheduleButton.translatesAutoresizingMaskIntoConstraints = false
         addChevronIcon(to: scheduleButton)
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = .zero
+        config.titlePadding = 0
+        scheduleButton.configuration = config
+
         
         separatorView.backgroundColor = .systemGray4
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -146,7 +152,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupScheduleDescriptionLabel() {
-        scheduleDescriptionLabel.font = .systemFont(ofSize: 13)
+        scheduleDescriptionLabel.font = .systemFont(ofSize: 17)
         scheduleDescriptionLabel.textColor = .systemGray
         scheduleDescriptionLabel.numberOfLines = 1
         scheduleDescriptionLabel.isHidden = true
@@ -160,6 +166,11 @@ final class NewTrackerViewController: UIViewController {
     private func setupLayout() {
         optionsTopConstraint = optionsContainerView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24)
         
+        scheduleDescriptionTopConstraint = scheduleDescriptionLabel.topAnchor.constraint(
+            equalTo: scheduleButton.titleLabel!.bottomAnchor,
+            constant: 4
+        )
+
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -190,7 +201,7 @@ final class NewTrackerViewController: UIViewController {
             
             scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
             scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
-            scheduleDescriptionLabel.topAnchor.constraint(equalTo: scheduleButton.titleLabel!.bottomAnchor, constant: 4)
+            scheduleDescriptionTopConstraint
             ])
     }
     
@@ -214,18 +225,38 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func updateScheduleLabel() {
-        guard !selectedWeekDays.isEmpty else { // если выбранных дней нету - скрываем
+        guard !selectedWeekDays.isEmpty else {
             scheduleDescriptionLabel.isHidden = true
+
+            scheduleButton.contentVerticalAlignment = .center
+            setScheduleButtonInsets(top: 0)
+
             return
         }
 
-        let text = selectedWeekDays // если есть, выводим
+        let text = selectedWeekDays
             .map { $0.shortTitle }
             .joined(separator: ", ")
 
         scheduleDescriptionLabel.text = text
         scheduleDescriptionLabel.isHidden = false
+
+        scheduleButton.contentVerticalAlignment = .top
+        setScheduleButtonInsets(top: 14)
     }
+
+
+    private func setScheduleButtonInsets(top: CGFloat) {
+        var config = scheduleButton.configuration ?? .plain()
+        config.contentInsets = NSDirectionalEdgeInsets(
+            top: top,
+            leading: 0,
+            bottom: 0,
+            trailing: 0
+        )
+        scheduleButton.configuration = config
+    }
+
     
     @objc private func createButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
@@ -295,5 +326,6 @@ extension NewTrackerViewController: UITextFieldDelegate {
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
+    
 
 }
