@@ -1,6 +1,8 @@
 import UIKit
 
 final class NewTrackerViewController: UIViewController {
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     private let titleLabel = UILabel()
     private let nameTextField = UITextField()
@@ -16,6 +18,17 @@ final class NewTrackerViewController: UIViewController {
     private let scheduleDescriptionLabel = UILabel()
     private var scheduleDescriptionTopConstraint: NSLayoutConstraint!
     
+    private let emojiTitleLabel = UILabel()
+    private let emojis = TrackerEmoji.all
+    private var selectedEmoji: String?
+    
+    private let colorTitleLabel = UILabel()
+    private let colors = TrackerColors.all
+    private var selectedColorIndex: Int?
+    
+    private var emojiCollectionView: UICollectionView!
+    private var colorCollectionView: UICollectionView!
+    
     var onCreate: ((Tracker) -> Void)?
     private var selectedWeekDays: [Weekday] = []
     private var optionsTopConstraint: NSLayoutConstraint!
@@ -23,25 +36,48 @@ final class NewTrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        setupScrollView()
+        
         setupCancelButton()
         setupCreateButton()
         setupTitle()
         setupNameTextField()
         setupErrorLabel()
         setupOptionsContainer()
-        setupScheduleDescriptionLabel()
+        setupEmojiTitleLabel()
+        setupEmojiCollectionView()
+        setupColorTitleLabel()
+        setupColorCollectionView()
         
         setupLayout()
+        
+        registerForKeyboardNotifications()
+    }
+    
+    deinit {
+        removeKeyboardNotifications()
     }
     
     // MARK: Настройка UI
+    private func setupScrollView() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        view.addSubview(scrollView)
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        
+        [titleLabel, nameTextField, errorLabel, optionsContainerView, emojiTitleLabel,
+         colorTitleLabel,].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview($0)
+        }
+    }
     
     private func setupTitle() {
         titleLabel.text = "Новая привычка"
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .black
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(titleLabel)
     }
     
     private func setupNameTextField() {
@@ -51,8 +87,6 @@ final class NewTrackerViewController: UIViewController {
         nameTextField.textColor = .black
         nameTextField.setLeftPadding(16)
         nameTextField.delegate = self
-        nameTextField.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(nameTextField)
     }
     
     private func setupErrorLabel() {
@@ -60,15 +94,11 @@ final class NewTrackerViewController: UIViewController {
         errorLabel.font = UIFont.systemFont(ofSize: 17)
         errorLabel.textColor = .red
         errorLabel.isHidden = true
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(errorLabel)
     }
     
     private func setupOptionsContainer() {
         optionsContainerView.backgroundColor = .systemGray6
         optionsContainerView.layer.cornerRadius = 16
-        optionsContainerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(optionsContainerView)
         
         // Настройка кнопок
         categoryButton.setTitle("Категория", for: .normal)
@@ -94,7 +124,18 @@ final class NewTrackerViewController: UIViewController {
         separatorView.backgroundColor = .systemGray4
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         
-        [categoryButton, separatorView, scheduleButton].forEach { optionsContainerView.addSubview($0) }
+        scheduleDescriptionLabel.font = .systemFont(ofSize: 17)
+        scheduleDescriptionLabel.textColor = .systemGray
+        scheduleDescriptionLabel.numberOfLines = 1
+        scheduleDescriptionLabel.isHidden = true
+        scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        [categoryButton, separatorView, scheduleButton, scheduleDescriptionLabel].forEach { optionsContainerView.addSubview($0) }
+        
+        scheduleDescriptionTopConstraint = scheduleDescriptionLabel.topAnchor.constraint(
+            equalTo: scheduleButton.titleLabel!.bottomAnchor,
+            constant: 4
+        )
         
         NSLayoutConstraint.activate([
             categoryButton.topAnchor.constraint(equalTo: optionsContainerView.topAnchor),
@@ -110,7 +151,12 @@ final class NewTrackerViewController: UIViewController {
             scheduleButton.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
             scheduleButton.leadingAnchor.constraint(equalTo: optionsContainerView.leadingAnchor, constant: 16),
             scheduleButton.trailingAnchor.constraint(equalTo: optionsContainerView.trailingAnchor, constant: -16),
-            scheduleButton.bottomAnchor.constraint(equalTo: optionsContainerView.bottomAnchor)
+            scheduleButton.bottomAnchor.constraint(equalTo: optionsContainerView.bottomAnchor),
+            
+            scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
+            scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
+            scheduleDescriptionTopConstraint,
+            // scheduleDescriptionLabel.topAnchor.constraint(equalTo: scheduleButton.titleLabel!.bottomAnchor, constant: 4)
         ])
     }
     
@@ -151,42 +197,50 @@ final class NewTrackerViewController: UIViewController {
         view.addSubview(createButton)
     }
     
-    private func setupScheduleDescriptionLabel() {
-        scheduleDescriptionLabel.font = .systemFont(ofSize: 17)
-        scheduleDescriptionLabel.textColor = .systemGray
-        scheduleDescriptionLabel.numberOfLines = 1
-        scheduleDescriptionLabel.isHidden = true
-        scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        optionsContainerView.addSubview(scheduleDescriptionLabel)
+    private func setupEmojiTitleLabel() {
+        emojiTitleLabel.text = "Emoji"
+        emojiTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+        emojiTitleLabel.textColor = .black
     }
     
+    private func setupColorTitleLabel() {
+        colorTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+        colorTitleLabel.text = "Цвет"
+        colorTitleLabel.textColor = .black
+    }
     
-    // MARK: Layout
+    // MARK: - Layout
     
     private func setupLayout() {
         optionsTopConstraint = optionsContainerView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24)
         
-        scheduleDescriptionTopConstraint = scheduleDescriptionLabel.topAnchor.constraint(
-            equalTo: scheduleButton.titleLabel!.bottomAnchor,
-            constant: 4
-        )
-        
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -16),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
+            titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 75),
             
             errorLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 8),
-            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             optionsTopConstraint,
             
-            optionsContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            optionsContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            optionsContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            optionsContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             optionsContainerView.heightAnchor.constraint(equalToConstant: 150),
             
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -199,22 +253,116 @@ final class NewTrackerViewController: UIViewController {
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8),
             createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
             
-            scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
-            scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
-            scheduleDescriptionTopConstraint
+            emojiTitleLabel.topAnchor.constraint(equalTo: optionsContainerView.bottomAnchor, constant: 32),
+            emojiTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiTitleLabel.bottomAnchor),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            
+            colorTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            colorTitleLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            
+            colorCollectionView.topAnchor.constraint(equalTo: colorTitleLabel.bottomAnchor),
+            colorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            colorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            // надо ли?
+            colorCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
+    // MARK: - Обработка клавиатуры
     
-    // MARK: Кнопка расписания
+    private func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    private func removeKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        let keyboardHeight = keyboardFrame.height
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        
+        if nameTextField.isFirstResponder {
+            let textFieldFrame = nameTextField.convert(nameTextField.bounds, to: scrollView)
+            scrollView.scrollRectToVisible(textFieldFrame, animated: true)
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
+    // MARK: -
+    
+    private func makeEmojiLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 19)
+        return layout
+    }
+    
+    private func makeColorLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 24, left: 18, bottom: 24, right: 19)
+        return layout
+    }
+    
+    private func setupEmojiCollectionView() {
+        let layout = makeEmojiLayout()
+        emojiCollectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: layout
+        )
+        emojiCollectionView.setCollectionViewLayout(makeEmojiLayout(), animated: false)
+        emojiCollectionView.backgroundColor = .clear
+        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        emojiCollectionView.delegate = self
+        emojiCollectionView.dataSource = self
+        
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: EmojiCell.reuseIdentifier)
+        
+        contentView.addSubview(emojiCollectionView)
+    }
+    
+    private func setupColorCollectionView() {
+        let layout = makeColorLayout()
+        colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        colorCollectionView.setCollectionViewLayout(makeColorLayout(), animated: false)
+        colorCollectionView.backgroundColor = .clear
+        colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        colorCollectionView.delegate = self
+        colorCollectionView.dataSource = self
+        
+        colorCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
+        
+        contentView.addSubview(colorCollectionView)
+    }
+    
     @objc private func scheduleButtonTapped() {
         let scheduleVc = ScheduleViewController()
-        // подписываемся на результат
-        scheduleVc.onDone = {[weak self] selectedDays in // когда контроллер вызовет onDone, выполнится этот код
+        scheduleVc.onDone = {[weak self] selectedDays in
             self?.selectedWeekDays = selectedDays.sorted { $0.rawValue < $1.rawValue }
             self?.updateScheduleLabel()
             self?.updateCreateButtonState()
         }
-        scheduleVc.modalPresentationStyle = .pageSheet // шторка снизу
+        scheduleVc.modalPresentationStyle = .pageSheet
         if let sheet = scheduleVc.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.preferredCornerRadius = 16
@@ -260,18 +408,23 @@ final class NewTrackerViewController: UIViewController {
     @objc private func createButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else { return }
         guard !selectedWeekDays.isEmpty else { return }
+        guard let selectedEmoji = selectedEmoji else { return }
+        guard let selectedColorIndex = selectedColorIndex else { return }
+        
+        let selectedUIColor = colors[selectedColorIndex]
+        let colorHex = selectedUIColor.toHexString()
         
         let tracker = Tracker(
             id: UUID(),
             name: name,
-            color: "red",
-            emoji: "🔥",
+            color: colorHex,
+            emoji: selectedEmoji,
             schedule: selectedWeekDays
         )
         
         print("Создан трекер:", tracker)
         
-        onCreate?(tracker)  
+        onCreate?(tracker)
         
         dismiss(animated: true)
     }
@@ -279,8 +432,10 @@ final class NewTrackerViewController: UIViewController {
     private func updateCreateButtonState() {
         let isNameValid = !(nameTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
         let hasSelectedDays = !selectedWeekDays.isEmpty
+        let hasEmoji = selectedEmoji != nil
+        let hasColor = selectedColorIndex != nil
         
-        let isEnabled = isNameValid && hasSelectedDays
+        let isEnabled = isNameValid && hasSelectedDays && hasEmoji && hasColor
         
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .black : .systemGray
@@ -322,5 +477,48 @@ extension NewTrackerViewController: UITextFieldDelegate {
     
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
+    }
+}
+
+extension NewTrackerViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == emojiCollectionView {
+            return emojis.count
+        } else if collectionView == colorCollectionView {
+            return colors.count
+        }
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == emojiCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiCell.reuseIdentifier, for: indexPath) as! EmojiCell
+            let emoji = emojis[indexPath.item]
+            cell.emojiConfigure(with: emoji, isSelected: emoji == selectedEmoji)
+            return cell
+        } else if collectionView == colorCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
+            let color = colors[indexPath.item]
+            let isSelected = selectedColorIndex == indexPath.item  
+            cell.colorConfigure(with: color, isSelected: isSelected)
+            return cell
+        }
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == emojiCollectionView {
+            selectedEmoji = emojis[indexPath.item]
+            collectionView.reloadData()
+            updateCreateButtonState()
+        } else if collectionView == colorCollectionView {
+            selectedColorIndex = indexPath.item
+            collectionView.reloadData()
+            updateCreateButtonState()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 52, height: 52)
     }
 }
