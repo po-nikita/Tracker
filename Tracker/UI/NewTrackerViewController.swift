@@ -100,7 +100,6 @@ final class NewTrackerViewController: UIViewController {
         optionsContainerView.backgroundColor = .systemGray6
         optionsContainerView.layer.cornerRadius = 16
         
-        // Настройка кнопок
         categoryButton.setTitle("Категория", for: .normal)
         categoryButton.setTitleColor(.black, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
@@ -156,7 +155,6 @@ final class NewTrackerViewController: UIViewController {
             scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
             scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
             scheduleDescriptionTopConstraint,
-            // scheduleDescriptionLabel.topAnchor.constraint(equalTo: scheduleButton.titleLabel!.bottomAnchor, constant: 4)
         ])
     }
     
@@ -499,7 +497,7 @@ extension NewTrackerViewController: UICollectionViewDataSource, UICollectionView
         } else if collectionView == colorCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as! ColorCell
             let color = colors[indexPath.item]
-            let isSelected = selectedColorIndex == indexPath.item  
+            let isSelected = selectedColorIndex == indexPath.item
             cell.colorConfigure(with: color, isSelected: isSelected)
             return cell
         }

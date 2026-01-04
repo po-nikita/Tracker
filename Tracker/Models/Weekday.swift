@@ -1,6 +1,6 @@
 import Foundation
 
-enum Weekday: Int, CaseIterable {
+enum Weekday: Int, Codable, CaseIterable {
     case monday = 1
     case tuesday
     case wednesday
@@ -11,7 +11,7 @@ enum Weekday: Int, CaseIterable {
     
     var title: String {
         switch self {
-        case .monday: 
+        case .monday:
             return "Понедельник"
         case .tuesday:
             return "Вторник"
