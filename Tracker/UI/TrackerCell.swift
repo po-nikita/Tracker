@@ -90,7 +90,7 @@ final class TrackerCell: UICollectionViewCell {
         trackerID = tracker.id
         titleLabel.text = tracker.name
         emojiLabel.text = tracker.emoji
-        cardView.backgroundColor = .systemGreen
+        cardView.backgroundColor = UIColor(hex: tracker.color)
         daysLabel.text = "\(completedCount) \(dayWord(for: completedCount))"
         
         let imageName = isCompleted ? "checkmark" : "plus"

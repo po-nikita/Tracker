@@ -1,20 +1,21 @@
 import UIKit
 
 final class WeekdayCell: UITableViewCell {
-    static let reuseIdentifier = "WeekdayCell" // Идентификатор переиспользованной ячейки
+    static let reuseIdentifier = "WeekdayCell"
     
     private let titleLabel = UILabel()
     private let daySwitch = UISwitch()
     
-    var onSwitchChanged: ((Bool) -> Void)? // closure, которое передает true/false во внешний код
+    var onSwitchChanged: ((Bool) -> Void)?
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) { // инициализатор
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
-    required init?(coder: NSCoder){ 
-        fatalError("init(coder:) has not been implemented")
+    @available(*, unavailable)
+    required init?(coder: NSCoder){
+        nil
     }
     
     private func setupUI() {
@@ -33,17 +34,17 @@ final class WeekdayCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
-        daySwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged) // Подписываемся на изменение состояния switch.
-        accessoryView = daySwitch // switch справа, как в настройках.
+        daySwitch.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
+        accessoryView = daySwitch
     }
     
-    func configure(day: Weekday, isOn: Bool) { // Метод для настройки ячейки извне.
-        titleLabel.text = day.title // Берём название дня из enum.
-        daySwitch.isOn = isOn //Устанавливаем состояние переключателя.
+    func configure(day: Weekday, isOn: Bool) {
+        titleLabel.text = day.title
+        daySwitch.isOn = isOn
         
     }
     
     @objc private func switchChanged() {
-        onSwitchChanged?(daySwitch.isOn) //Если closure установлен — передаём новое состояние наружу.
+        onSwitchChanged?(daySwitch.isOn) 
     }
 }
