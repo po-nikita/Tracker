@@ -2,8 +2,19 @@ import UIKit
 
 final class TrackerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var trackerStore: TrackerStore!
-    private var recordStore: TrackerRecordStore!
+    private lazy var trackerStore: TrackerStore = {
+        guard let context = AppDelegate.context else {
+            fatalError("Core Data context is not available")
+        }
+        return TrackerStore(context: context)
+    }()
+    
+    private lazy var recordStore: TrackerRecordStore = {
+        guard let context = AppDelegate.context else {
+            fatalError("Core Data context is not available")
+        }
+        return TrackerRecordStore(context: context)
+    }()
     
     private let titleLabel = UILabel()
     private let searchView = UIView()
@@ -25,10 +36,6 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        let context = AppDelegate.context
-        trackerStore = TrackerStore(context: context)
-        recordStore = TrackerRecordStore(context: context)
         
         setupNavigationBar()
         setupTitleLabel()
@@ -227,7 +234,9 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         let trackers = trackersForSelectedDate(in: categories[indexPath.section])
         let tracker = trackers[indexPath.item]
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as! TrackerCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as? TrackerCell else {
+            return UICollectionViewCell()
+        }
         
         let isCompletedToday = recordStore.isTrackerCompleted(trackerID: tracker.id, date: selectedDate)
         
@@ -240,20 +249,28 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         
         return cell
     }
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         
-        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
         
-        let trackers = trackersForSelectedDate(in: categories[indexPath.section])
-        if trackers.isEmpty { return UICollectionReusableView() }
-        
-        let header = collectionView.dequeueReusableSupplementaryView(
+        let reusableView = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: CategoryHeaderView.reuseIdentifier,
             for: indexPath
-        ) as! CategoryHeaderView
+        )
+        
+        guard let header = reusableView as? CategoryHeaderView else {
+            assertionFailure("Expected CategoryHeaderView")
+            return reusableView
+        }
+        
         header.titleLabel.text = categories[indexPath.section].title
         return header
     }

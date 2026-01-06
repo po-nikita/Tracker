@@ -2,16 +2,16 @@ import UIKit
 import CoreData
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    static var shared: AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
+    static var shared: AppDelegate? {
+        UIApplication.shared.delegate as? AppDelegate
     }
     
-    static var context: NSManagedObjectContext {
-        return shared.persistentContainer.viewContext
+    static var context: NSManagedObjectContext? {
+        shared?.persistentContainer.viewContext
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -23,14 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-    }
-    
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Tracker")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                assertionFailure("Unresolved error \(error), \(error.userInfo)")
             }
         })
         return container
@@ -43,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 try context.save()
             } catch {
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                assertionFailure("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
     }

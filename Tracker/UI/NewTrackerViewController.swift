@@ -404,10 +404,10 @@ final class NewTrackerViewController: UIViewController {
     
     
     @objc private func createButtonTapped() {
-        guard let name = nameTextField.text, !name.isEmpty else { return }
-        guard !selectedWeekDays.isEmpty else { return }
-        guard let selectedEmoji = selectedEmoji else { return }
-        guard let selectedColorIndex = selectedColorIndex else { return }
+        guard let name = nameTextField.text, !name.isEmpty,
+              !selectedWeekDays.isEmpty,
+              let selectedEmoji = selectedEmoji,
+              let selectedColorIndex = selectedColorIndex else { return }
         
         let selectedUIColor = colors[selectedColorIndex]
         let colorHex = selectedUIColor.toHexString()
