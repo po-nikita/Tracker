@@ -91,7 +91,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - Bind
     
     private func bindViewModel() {
-        viewModel.onUptade = { [weak self] in
+        viewModel.onUpdate = { [weak self] in
             guard let self else { return }
             self.tableView.reloadData()
             self.updateEmptyState()

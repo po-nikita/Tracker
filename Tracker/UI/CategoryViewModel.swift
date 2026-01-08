@@ -6,7 +6,7 @@ final class CategoryViewModel {
     private(set) var categories: [TrackerCategoryCoreData] = []
     private(set) var selectedCategory: TrackerCategoryCoreData?
     
-    var onUptade: (() -> Void)?
+    var onUpdate: (() -> Void)?
     
     init(categoryStore: TrackerCategoryStore) {
         self.categoryStore = categoryStore
@@ -15,7 +15,7 @@ final class CategoryViewModel {
     
     func loadCategories() {
         categories = categoryStore.fetchCategories()
-        onUptade?()
+        onUpdate?()
     }
     
     func addCategory(title: String) {
@@ -30,7 +30,7 @@ final class CategoryViewModel {
     
     func selectCategory(_ category: TrackerCategoryCoreData) {
         selectedCategory = category
-        onUptade?()
+        onUpdate?()
     }
     
     func isSelected(_ category: TrackerCategoryCoreData) -> Bool {

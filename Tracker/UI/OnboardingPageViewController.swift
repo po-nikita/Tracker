@@ -87,13 +87,19 @@ final class OnboardingPageViewController: UIPageViewController {
 extension OnboardingPageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = pageControllers.firstIndex(of: viewController as! OnboardingContentViewController) else { return nil }
+        guard let contentVC = viewController as? OnboardingContentViewController,
+              let index = pageControllers.firstIndex(of: contentVC) else {
+            return nil
+        }
         let prevIndex = index - 1
         return prevIndex >= 0 ? pageControllers[prevIndex] : nil
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = pageControllers.firstIndex(of: viewController as! OnboardingContentViewController) else { return nil }
+        guard let contentVC = viewController as? OnboardingContentViewController,
+              let index = pageControllers.firstIndex(of: contentVC) else {
+            return nil
+        }
         let nextIndex = index + 1
         return nextIndex < pageControllers.count ? pageControllers[nextIndex] : nil
     }
