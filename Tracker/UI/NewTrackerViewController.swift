@@ -17,6 +17,9 @@ final class NewTrackerViewController: UIViewController {
     private let createButton = UIButton()
     private let scheduleDescriptionLabel = UILabel()
     private var scheduleDescriptionTopConstraint: NSLayoutConstraint!
+    private let categoryDescriptionLabel = UILabel()
+    private var categoryDescriptionTopConstraint: NSLayoutConstraint!
+    
     
     private let emojiTitleLabel = UILabel()
     private let emojis = TrackerEmoji.all
@@ -29,9 +32,14 @@ final class NewTrackerViewController: UIViewController {
     private var emojiCollectionView: UICollectionView!
     private var colorCollectionView: UICollectionView!
     
-    var onCreate: ((Tracker) -> Void)?
+    private var selectedCategory: TrackerCategoryCoreData?
+    var onCreate: ((Tracker, TrackerCategoryCoreData?) -> Void)?
     private var selectedWeekDays: [Weekday] = []
     private var optionsTopConstraint: NSLayoutConstraint!
+    var onCategoryDeleted: (() -> Void)?
+    var onCategoryUpdated: (() -> Void)?
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,19 +114,19 @@ final class NewTrackerViewController: UIViewController {
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
         addChevronIcon(to: categoryButton)
+        categoryButton.addTarget(self, action: #selector(selectCategoryTapped), for: .touchUpInside)
         
         scheduleButton.setTitle("Расписание", for: .normal)
         scheduleButton.setTitleColor(.black, for: .normal)
         scheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
-        scheduleButton.addTarget(self, action: #selector(scheduleButtonTapped), for: .touchUpInside)
         scheduleButton.translatesAutoresizingMaskIntoConstraints = false
         addChevronIcon(to: scheduleButton)
         var config = UIButton.Configuration.plain()
         config.contentInsets = .zero
         config.titlePadding = 0
         scheduleButton.configuration = config
-        
+        scheduleButton.addTarget(self, action: #selector(scheduleButtonTapped), for: .touchUpInside)
         
         separatorView.backgroundColor = .systemGray4
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -129,7 +137,20 @@ final class NewTrackerViewController: UIViewController {
         scheduleDescriptionLabel.isHidden = true
         scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        [categoryButton, separatorView, scheduleButton, scheduleDescriptionLabel].forEach { optionsContainerView.addSubview($0) }
+        categoryDescriptionLabel.font = .systemFont(ofSize: 17)
+        categoryDescriptionLabel.textColor = .systemGray
+        categoryDescriptionLabel.numberOfLines = 1
+        categoryDescriptionLabel.isHidden = true
+        categoryDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        [categoryButton, categoryDescriptionLabel, separatorView, scheduleButton, scheduleDescriptionLabel].forEach {
+            optionsContainerView.addSubview($0)
+        }
+        
+        categoryDescriptionTopConstraint = categoryDescriptionLabel.topAnchor.constraint(
+            equalTo: categoryButton.titleLabel!.bottomAnchor,
+            constant: 4
+        )
         
         scheduleDescriptionTopConstraint = scheduleDescriptionLabel.topAnchor.constraint(
             equalTo: scheduleButton.titleLabel!.bottomAnchor,
@@ -142,6 +163,10 @@ final class NewTrackerViewController: UIViewController {
             categoryButton.trailingAnchor.constraint(equalTo: optionsContainerView.trailingAnchor, constant: -16),
             categoryButton.heightAnchor.constraint(equalToConstant: 75),
             
+            categoryDescriptionTopConstraint,
+            categoryDescriptionLabel.leadingAnchor.constraint(equalTo: categoryButton.leadingAnchor),
+            categoryDescriptionLabel.trailingAnchor.constraint(equalTo: categoryButton.trailingAnchor),
+            
             separatorView.topAnchor.constraint(equalTo: categoryButton.bottomAnchor),
             separatorView.leadingAnchor.constraint(equalTo: optionsContainerView.leadingAnchor, constant: 16),
             separatorView.trailingAnchor.constraint(equalTo: optionsContainerView.trailingAnchor, constant: -16),
@@ -152,11 +177,12 @@ final class NewTrackerViewController: UIViewController {
             scheduleButton.trailingAnchor.constraint(equalTo: optionsContainerView.trailingAnchor, constant: -16),
             scheduleButton.bottomAnchor.constraint(equalTo: optionsContainerView.bottomAnchor),
             
-            scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
-            scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor),
             scheduleDescriptionTopConstraint,
+            scheduleDescriptionLabel.leadingAnchor.constraint(equalTo: scheduleButton.leadingAnchor),
+            scheduleDescriptionLabel.trailingAnchor.constraint(equalTo: scheduleButton.trailingAnchor)
         ])
     }
+    
     
     private func addChevronIcon(to button: UIButton) {
         let chevronImage = UIImage(systemName: "chevron.right")
@@ -266,7 +292,6 @@ final class NewTrackerViewController: UIViewController {
             colorCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             colorCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             colorCollectionView.heightAnchor.constraint(equalToConstant: 204),
-            // надо ли?
             colorCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
@@ -303,6 +328,31 @@ final class NewTrackerViewController: UIViewController {
     @objc private func keyboardWillHide(_ notification: Notification) {
         scrollView.contentInset = .zero
         scrollView.scrollIndicatorInsets = .zero
+    }
+    
+    @objc private func selectCategoryTapped() {
+        guard let context = AppDelegate.context else { return }
+        let categoryStore = TrackerCategoryStore(context: context)
+        let viewModel = CategoryViewModel(categoryStore: categoryStore)
+        let categoryVC = CategoryViewController(viewModel: viewModel)
+        
+        categoryVC.onCategorySelected = { [weak self] category in
+            self?.selectedCategory = category
+            self?.categoryDescriptionLabel.text = category.title
+            self?.categoryDescriptionLabel.isHidden = false
+            self?.updateCreateButtonState()
+        }
+        
+        categoryVC.onCategoryDeleted = { [weak self] in
+            self?.onCategoryDeleted?()  
+        }
+        
+        categoryVC.onCategoryUpdated = { [weak self] in
+            self?.onCategoryUpdated?()
+        }
+        
+        
+        present(categoryVC, animated: true)
     }
     // MARK: -
     
@@ -407,7 +457,10 @@ final class NewTrackerViewController: UIViewController {
         guard let name = nameTextField.text, !name.isEmpty,
               !selectedWeekDays.isEmpty,
               let selectedEmoji = selectedEmoji,
-              let selectedColorIndex = selectedColorIndex else { return }
+              let selectedColorIndex = selectedColorIndex,
+              let selectedCategory = selectedCategory,
+              let categoryTitle = selectedCategory.title else { return }
+        
         
         let selectedUIColor = colors[selectedColorIndex]
         let colorHex = selectedUIColor.toHexString()
@@ -417,12 +470,13 @@ final class NewTrackerViewController: UIViewController {
             name: name,
             color: colorHex,
             emoji: selectedEmoji,
-            schedule: selectedWeekDays
+            schedule: selectedWeekDays,
+            categoryTitle: categoryTitle
         )
         
         print("Создан трекер:", tracker)
         
-        onCreate?(tracker)
+        onCreate?(tracker, selectedCategory)
         
         dismiss(animated: true)
     }
@@ -432,8 +486,9 @@ final class NewTrackerViewController: UIViewController {
         let hasSelectedDays = !selectedWeekDays.isEmpty
         let hasEmoji = selectedEmoji != nil
         let hasColor = selectedColorIndex != nil
+        let hasCategory = selectedCategory != nil
         
-        let isEnabled = isNameValid && hasSelectedDays && hasEmoji && hasColor
+        let isEnabled = isNameValid && hasSelectedDays && hasEmoji && hasColor && hasCategory
         
         createButton.isEnabled = isEnabled
         createButton.backgroundColor = isEnabled ? .black : .systemGray

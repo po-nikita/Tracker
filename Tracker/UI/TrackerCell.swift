@@ -98,7 +98,6 @@ final class TrackerCell: UICollectionViewCell {
         actionButton.backgroundColor = .systemGreen
     }
     
-    
     private func dayWord(for count: Int) -> String {
         if count % 10 == 1 && count % 100 != 11 {
             return "день"
@@ -110,5 +109,4 @@ final class TrackerCell: UICollectionViewCell {
         
         return "дней"
     }
-    
 }

@@ -11,6 +11,17 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = TabBarController()
         window?.makeKeyAndVisible()
         
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+        
+        if hasSeenOnboarding {
+            self.window?.rootViewController = TabBarController()
+        } else {
+            let onboardingVC = OnboardingPageViewController(
+                transitionStyle: .scroll,
+                navigationOrientation: .horizontal
+            )
+            self.window?.rootViewController = onboardingVC
+        }
     }
     
     func sceneDidEnterBackground(_ scene: UIScene) {

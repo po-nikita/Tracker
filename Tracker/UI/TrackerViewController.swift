@@ -26,9 +26,8 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private var collectionView: UICollectionView!
     private var selectedDate: Date = Date()
     
-    var categories: [TrackerCategory] = [
-        TrackerCategory(title: "Важное", trackers: [])
-    ]
+    var categories: [TrackerCategory] = []
+    
     var completedTrackers: [TrackerRecord] = []
     let datePicker = UIDatePicker()
     
@@ -63,9 +62,13 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func loadDataFromCoreData() {
         let allTrackers = trackerStore.loadTrackers()
         
-        var trackersDict: [String: [Tracker]] = ["Важное": []]
+        var trackersDict: [String: [Tracker]] = [:]
         for tracker in allTrackers {
-            trackersDict["Важное"]?.append(tracker)
+            let categoryTitle = tracker.categoryTitle
+            if trackersDict[categoryTitle] == nil {
+                trackersDict[categoryTitle] = []
+            }
+            trackersDict[categoryTitle]?.append(tracker)
         }
         
         categories = trackersDict.map { title, trackers in
@@ -101,11 +104,17 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         loadDataFromCoreData()
     }
     
-    
     @objc private func addButtonTapped() {
         let vc = NewTrackerViewController()
-        vc.onCreate = { [weak self] tracker in
-            self?.addTracker(tracker, to: "Важное")
+        vc.onCreate = { [weak self] tracker, _ in
+            self?.addTracker(tracker)
+        }
+        
+        vc.onCategoryDeleted = { [weak self] in
+            self?.loadDataFromCoreData()
+        }
+        vc.onCategoryUpdated = { [weak self] in
+            self?.loadDataFromCoreData()
         }
         
         
@@ -215,8 +224,8 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         collectionView.delegate = self
     }
     
-    private func addTracker(_ tracker: Tracker, to categoryTitle: String) {
-        trackerStore.saveTracker(tracker, categoryTitle: categoryTitle)
+    private func addTracker(_ tracker: Tracker) {
+        trackerStore.saveTracker(tracker, categoryTitle: tracker.categoryTitle)
         
         loadDataFromCoreData()
     }

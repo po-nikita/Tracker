@@ -66,27 +66,31 @@ final class TrackerStore: NSObject {
             let results = try context.fetch(fetchRequest)
             var trackers: [Tracker] = []
             
-            for entity in results {
-                guard let id = entity.id,
-                      let name = entity.name,
-                      let color = entity.color,
-                      let emoji = entity.emoji else {
+            for trackerEntity in results {
+                guard let id = trackerEntity.id,
+                      let name = trackerEntity.name,
+                      let color = trackerEntity.color,
+                      let emoji = trackerEntity.emoji else {
                     continue
                 }
                 
                 var schedule: [Weekday] = []
-                if let scheduleData = entity.schedule {
+                if let scheduleData = trackerEntity.schedule {
                     let decoder = JSONDecoder()
                     schedule = (try? decoder.decode([Weekday].self, from: scheduleData)) ?? []
                 }
+                
+                let categoryTitle = trackerEntity.category?.title ?? "Без категории"
                 
                 let tracker = Tracker(
                     id: id,
                     name: name,
                     color: color,
                     emoji: emoji,
-                    schedule: schedule
+                    schedule: schedule,
+                    categoryTitle: categoryTitle
                 )
+                
                 trackers.append(tracker)
             }
             
