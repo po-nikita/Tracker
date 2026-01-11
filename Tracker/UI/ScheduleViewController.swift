@@ -12,7 +12,7 @@ final class ScheduleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Расписание"
+        title = NSLocalizedString("schedule.title", comment: "")
         setupTableView()
         setupTitle()
         setupDoneButton()
@@ -20,7 +20,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupTitle() {
-        titleLabel.text = "Расписание"
+        titleLabel.text = NSLocalizedString("schedule.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupDoneButton() {
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("schedule.doneButton.title", comment: ""), for: .normal)
         doneButton.setTitleColor(.white, for: .normal)
         doneButton.backgroundColor = .black
         doneButton.layer.cornerRadius = 16

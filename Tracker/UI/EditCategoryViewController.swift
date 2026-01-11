@@ -22,7 +22,7 @@ final class EditCategoryViewController: UIViewController {
         view.backgroundColor = .white
         
         let titleLabel = UILabel()
-        titleLabel.text = "Редактировать категорию"
+        titleLabel.text = NSLocalizedString("editCategory.title", comment: "")
         titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -35,7 +35,7 @@ final class EditCategoryViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textField)
         
-        doneButton.setTitle("Готово", for: .normal)
+        doneButton.setTitle(NSLocalizedString("editCategory.done", comment: ""), for: .normal)
         doneButton.isEnabled = false
         doneButton.backgroundColor = .systemGray
         doneButton.layer.cornerRadius = 16

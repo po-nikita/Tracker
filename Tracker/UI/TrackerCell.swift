@@ -91,22 +91,18 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.text = tracker.name
         emojiLabel.text = tracker.emoji
         cardView.backgroundColor = UIColor(hex: tracker.color)
-        daysLabel.text = "\(completedCount) \(dayWord(for: completedCount))"
+        daysLabel.text = String.localizedDays(completedCount)
         
         let imageName = isCompleted ? "checkmark" : "plus"
         actionButton.setImage(UIImage(systemName: imageName), for: .normal)
         actionButton.backgroundColor = .systemGreen
     }
     
-    private func dayWord(for count: Int) -> String {
-        if count % 10 == 1 && count % 100 != 11 {
-            return "день"
-        }
-        
-        if (2...4).contains(count % 10) && !(12...14).contains(count % 100) {
-            return "дня"
-        }
-        
-        return "дней"
+}
+
+extension String {
+    static func localizedDays(_ count: Int) -> String {
+        let format = NSLocalizedString("days_count", comment: "")
+        return String(format: format, count)
     }
 }

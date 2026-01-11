@@ -131,7 +131,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func setupTitleLabel() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
-        titleLabel.text = "Трекеры"
+        titleLabel.text = NSLocalizedString("tracker.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 41, weight: .bold)
     }
     
@@ -152,7 +152,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func setupSearchTextField() {
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchView.addSubview(searchTextField)
-        searchTextField.placeholder = "Поиск"
+        searchTextField.placeholder = NSLocalizedString("tracker.search.placeholder", comment: "")
         searchTextField.textColor = .ypGrayText
     }
     
@@ -165,7 +165,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func setupEmptyLabel() {
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyLabel)
-        emptyLabel.text = "Что будем отслеживать?"
+        emptyLabel.text = NSLocalizedString("tracker.emptylabel", comment: "")
         emptyLabel.font = .systemFont(ofSize: 12)
     }
     

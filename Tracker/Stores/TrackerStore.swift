@@ -80,7 +80,7 @@ final class TrackerStore: NSObject {
                     schedule = (try? decoder.decode([Weekday].self, from: scheduleData)) ?? []
                 }
                 
-                let categoryTitle = trackerEntity.category?.title ?? "Без категории"
+                let categoryTitle = trackerEntity.category?.title ?? NSLocalizedString("category.title.noCategory", comment: "no category for category title")
                 
                 let tracker = Tracker(
                     id: id,

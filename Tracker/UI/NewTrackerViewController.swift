@@ -83,13 +83,13 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupTitle() {
-        titleLabel.text = "Новая привычка"
+        titleLabel.text = NSLocalizedString("newTracker.title", comment: "")
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         titleLabel.textColor = .black
     }
     
     private func setupNameTextField() {
-        nameTextField.placeholder = "Введите название трекера"
+        nameTextField.placeholder = NSLocalizedString("newTracker.placeholder", comment: "")
         nameTextField.backgroundColor = UIColor.systemGray6
         nameTextField.layer.cornerRadius = 10
         nameTextField.textColor = .black
@@ -98,7 +98,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupErrorLabel() {
-        errorLabel.text = "Ограничение 38 символов"
+        errorLabel.text = NSLocalizedString("newTracker.errorLabel", comment: "")
         errorLabel.font = UIFont.systemFont(ofSize: 17)
         errorLabel.textColor = .red
         errorLabel.isHidden = true
@@ -108,7 +108,7 @@ final class NewTrackerViewController: UIViewController {
         optionsContainerView.backgroundColor = .systemGray6
         optionsContainerView.layer.cornerRadius = 16
         
-        categoryButton.setTitle("Категория", for: .normal)
+        categoryButton.setTitle(NSLocalizedString("newTracker.categoryButton.title", comment: ""), for: .normal)
         categoryButton.setTitleColor(.black, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         categoryButton.contentHorizontalAlignment = .left
@@ -116,7 +116,7 @@ final class NewTrackerViewController: UIViewController {
         addChevronIcon(to: categoryButton)
         categoryButton.addTarget(self, action: #selector(selectCategoryTapped), for: .touchUpInside)
         
-        scheduleButton.setTitle("Расписание", for: .normal)
+        scheduleButton.setTitle(NSLocalizedString("newTracker.scheduleButton.title", comment: ""), for: .normal)
         scheduleButton.setTitleColor(.black, for: .normal)
         scheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
@@ -197,7 +197,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("newtracker.cancelButton.title", comment: ""), for: .normal)
         cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         cancelButton.backgroundColor = .clear
@@ -210,7 +210,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(NSLocalizedString("newtracker.createButton.title", comment: ""), for: .normal)
         createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         createButton.layer.cornerRadius = 16
@@ -222,14 +222,14 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupEmojiTitleLabel() {
-        emojiTitleLabel.text = "Emoji"
+        emojiTitleLabel.text = NSLocalizedString("newTracker.emojiLabel", comment: "")
         emojiTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
         emojiTitleLabel.textColor = .black
     }
     
     private func setupColorTitleLabel() {
         colorTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-        colorTitleLabel.text = "Цвет"
+        colorTitleLabel.text = NSLocalizedString("newTracker.colorLabel", comment: "")
         colorTitleLabel.textColor = .black
     }
     
