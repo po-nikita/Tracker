@@ -1,89 +1,90 @@
 // TabBar
-"tab.trackers" = "Трекеры";
-"tab.statistics" = "Статистика";
+"tab.trackers" = "Trackers";
+"tab.statistics" = "Statistics";
 
 // Weekday
-"weekday.monday" = "Понедельник";
-"weekday.tuesday" = "Вторник";
-"weekday.wednesday" = "Среда";
-"weekday.thursday" = "Четверг";
-"weekday.friday" = "Пятница";
-"weekday.saturday" = "Суббота";
-"weekday.sunday" = "Воскресенье";
+"weekday.monday" = "Monday";
+"weekday.tuesday" = "Tuesday";
+"weekday.wednesday" = "Wednesday";
+"weekday.thursday" = "Thursday";
+"weekday.friday" = "Friday";
+"weekday.saturday" = "Saturday";
+"weekday.sunday" = "Sunday";
 
-"weekday.monday.short" = "Пн";
-"weekday.tuesday.short" = "Вт";
-"weekday.wednesday.short" = "Ср";
-"weekday.thursday.short" = "Чт";
-"weekday.friday.short" = "Пт";
-"weekday.saturday.short" = "Сб";
-"weekday.sunday.short" = "Вс";
+"weekday.monday.short" = "Mon";
+"weekday.tuesday.short" = "Tue";
+"weekday.wednesday.short" = "Wed";
+"weekday.thursday.short" = "Thu";
+"weekday.friday.short" = "Fri";
+"weekday.saturday.short" = "Sat";
+"weekday.sunday.short" = "Sun";
 
 // Category
-"category.title.noCategory" = "Без категории";
-"category.titleLabel" = "Категория";
-"category.emptyLabel" = "Привычки и события можно \n объединить по смыслу";
-"category.button.addCategory" = "Добавить категорию";
-"category.alert.edit" = "Редактировать";
-"category.alert.delete" = "Удалить";
-"category.alert.cancel" = "Отмена";
-"category.alert.deleteTitle" = "Удалить категорию?";
-"category.alert.message" = "Все данные категории будут удалены.";
+"category.title.noCategory" = "No category";
+"category.titleLabel" = "Category";
+"category.emptyLabel" = "You can \n organize habits and events by meaning";
+"category.button.addCategory" = "Add category";
+"category.alert.edit" = "Edit";
+"category.alert.delete" = "Delete";
+"category.alert.cancel" = "Cancel";
+"category.alert.deleteTitle" = "Delete category?";
+"category.alert.message" = "All data in this category will be deleted.";
 
-// edit category
-"editCategory.title" = "Редактировать категорию";
-"editCategory.done" = "Готово";
+// Edit category
+"editCategory.title" = "Edit category";
+"editCategory.done" = "Done";
 
-// new category
-"newCategory.title" = "Новая категория";
-"newCategory.placeholder" = "Введите название категории";
-"newCategory.done" = "Готово";
+// New category
+"newCategory.title" = "New category";
+"newCategory.placeholder" = "Enter category name";
+"newCategory.done" = "Done";
 
 // newTrackerViewController
-"newTracker.title" = "Новая привычка";
-"newTracker.placeholder" = "Введите название трекера";
-"newTracker.errorLabel" = "Ограничение 38 символов";
-"newTracker.categoryButton.title" = "Категория";
-"newTracker.scheduleButton.title" = "Расписание";
-"newtracker.cancelButton.title" = "Отменить";
-"newtracker.createButton.title" = "Создать";
+"newTracker.title" = "New habit";
+"newTracker.placeholder" = "Enter tracker name";
+"newTracker.errorLabel" = "Limit 38 characters";
+"newTracker.categoryButton.title" = "Category";
+"newTracker.scheduleButton.title" = "Schedule";
+"newtracker.cancelButton.title" = "Cancel";
+"newtracker.createButton.title" = "Create";
 "newTracker.emojiLabel" = "Emoji";
-"newTracker.colorLabel" = "Цвет";
-"editTracker.title" = "Редактирование привычки";
-"editTracker.save" = "Сохранить";
-
+"newTracker.colorLabel" = "Color";
+"editTracker.title" = "Edit habit";
+"editTracker.save" = "Save";
 
 // Onboarding
-"onboardingPage.firstTitle" = "Отслеживайте только \n то, что хотите";
-"onboardingPage.secondTitle" = "Даже если это \n не литры воды и йога";
-"onboardingPage.button.title" = "Вот это технологии!";
+"onboardingPage.firstTitle" = "Track only what you want";
+"onboardingPage.secondTitle" = "Even if it's not liters of water or yoga";
+"onboardingPage.button.title" = "Wow, technology!";
 
 // scheduleViewController
-"schedule.title" = "Расписание";
-"schedule.doneButton.title" = "Готово";
+"schedule.title" = "Schedule";
+"schedule.doneButton.title" = "Done";
 
 // TrackerViewController
-"tracker.title" = "Трекеры";
-"tracker.search.placeholder" = "Поиск";
-"tracker.emptylabel" = "Что будем отслеживать?";
-"tracker.emptyFound.label" = "Ничего не найдено";
-"tracker.context.edit" = "Редактировать";
-"tracker.context.delete" = "Удалить";
-"tracker.delete.confirm.title" = "Уверены что хотите удалить трекер?";
-"tracker.delete.confirm.message" = "Уверены что хотите удалить трекер?";
-"tracker.delete.confirm.cancel" = "Отмена";
-"tracker.delete.confirm.delete" = "Удалить";
+"tracker.title" = "Trackers";
+"tracker.search.placeholder" = "Search";
+"tracker.emptylabel" = "What shall we track?";
+"tracker.emptyFound.label" = "Nothing found";
+"tracker.context.edit" = "Edit";
+"tracker.context.delete" = "Delete";
+"tracker.delete.confirm.title" = "Are you sure you want to delete this tracker?";
+"tracker.delete.confirm.message" = "Are you sure you want to delete this tracker?";
+"tracker.delete.confirm.cancel" = "Cancel";
+"tracker.delete.confirm.delete" = "Delete";
+"tracker.filters.button" = "Filters";
 
-//trackerfilet
-"tracker.filter.all" = "Все трекеры";
-"tracker.filter.today" = "Трекеры на сегодня";
-"tracker.filter.completed" = "Завершенные";
-"tracker.filter.uncompleted" = "Незавершенные";
-"filters.title" = "Фильтры";
+// tracker filter
+"tracker.filter.all" = "All trackers";
+"tracker.filter.today" = "Today's trackers";
+"tracker.filter.completed" = "Completed";
+"tracker.filter.uncompleted" = "Uncompleted";
+"filters.title" = "Filters";
 
-"statistick.title" = "Статистика";
-"statistick.emptylabel" = "Анализировать пока нечего";
-"statistick.bestPeriod" = "Лучший период";
-"statistick.perfectDay" = "Идеальные дни";
-"statistick.completedTracker" = "Трекеров завершено";
-"statistick.average" = "Среднее значение";
+// Statistics
+"statistick.title" = "Statistics";
+"statistick.emptylabel" = "Nothing to analyze yet";
+"statistick.bestPeriod" = "Best streak";
+"statistick.perfectDay" = "Perfect days";
+"statistick.completedTracker" = "Trackers completed";
+"statistick.average" = "Average";

@@ -284,7 +284,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         emptyLabel.font = .systemFont(ofSize: 12)
     }
     private func setupFilterButton() {
-        filterButton.setTitle("Фильтры", for: .normal)
+        filterButton.setTitle(NSLocalizedString("tracker.filters.button", comment: ""), for: .normal)
         filterButton.backgroundColor = UIColor.systemBlue
         filterButton.setTitleColor(.white, for: .normal)
         filterButton.layer.cornerRadius = 16

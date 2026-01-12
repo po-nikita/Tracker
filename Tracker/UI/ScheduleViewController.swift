@@ -1,13 +1,13 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    private var selectedWeekDays: Set<Weekday> = [] // Хранение выбранных дней
-    var onDone: ((Set<Weekday>) -> Void)? // при нажатии передает выбранные дни
+    private var selectedWeekDays: Set<Weekday> = []
+    var onDone: ((Set<Weekday>) -> Void)? 
     
     private let doneButton = UIButton()
     private let titleLabel = UILabel()
-    private let tableView = UITableView(frame: .zero, style: .plain) // таблица со стилем
-    private let weekdays = Weekday.allCases // массив всех дней недели
+    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let weekdays = Weekday.allCases
     
     override func viewDidLoad() {
         super.viewDidLoad()

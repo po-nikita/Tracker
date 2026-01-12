@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>days_count</key>
@@ -12,33 +13,12 @@
             <string>NSStringPluralRuleType</string>
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
-            
             <key>one</key>
-            <string>%d день</string>
-            <key>many</key>
-            <string>%d дней</string>
+            <string>%d day</string>
             <key>other</key>
-            <string>%d дня</string>
+            <string>%d days</string>
             <key>zero</key>
-            <string>%d дней</string>
-            
-            <key>NSStringFormatRuleType</key>
-            <string>NSStringPluralRuleByNumber</string>
-            <key>NSStringFormatRuleByNumber</key>
-            <dict>
-                <key>0</key>
-                <string>zero</string>  
-                <key>1</key>
-                <string>one</string>
-                <key>2</key>
-                <string>other</string>
-                <key>3</key>
-                <string>other</string>
-                <key>4</key>
-                <string>other</string>
-                <key>default</key>
-                <string>many</string>
-            </dict>
+            <string>%d days</string>
         </dict>
     </dict>
 </dict>
