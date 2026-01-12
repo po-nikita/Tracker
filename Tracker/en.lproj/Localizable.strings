@@ -80,3 +80,10 @@
 "tracker.filter.completed" = "Завершенные";
 "tracker.filter.uncompleted" = "Незавершенные";
 "filters.title" = "Фильтры";
+
+"statistick.title" = "Статистика";
+"statistick.emptylabel" = "Анализировать пока нечего";
+"statistick.bestPeriod" = "Лучший период";
+"statistick.perfectDay" = "Идеальные дни";
+"statistick.completedTracker" = "Трекеров завершено";
+"statistick.average" = "Среднее значение";

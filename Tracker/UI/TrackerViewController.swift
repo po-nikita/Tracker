@@ -19,7 +19,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private var filteredCategories: [TrackerCategory] = []
     private var isSearching: Bool = false
     private let searchController = UISearchController(searchResultsController: nil)
-
+    
     private let titleLabel = UILabel()
     private let searchView = UIView()
     private let searchIcon = UIImageView()
@@ -114,7 +114,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             selectedDate = Date()
             datePicker.setDate(selectedDate, animated: true)
         }
-
+        
         filteredCategories = categories.map { category in
             let filteredTrackers: [Tracker]
             
@@ -175,7 +175,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         }
         present(filtersVC, animated: true)
     }
-
+    
     @objc private func dateChanged() {
         selectedDate = datePicker.date
         loadDataFromCoreData()
@@ -185,15 +185,15 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         guard let searchText = searchTextField.text, !searchText.isEmpty else {
             isSearching = false
             applyFilter(currentFilter)
-
+            
             return
         }
-
+        
         isSearching = true
         filterTrackers(for: searchText)
     }
-
-
+    
+    
     @objc private func addButtonTapped() {
         let vc = NewTrackerViewController()
         vc.onCreate = { [weak self] tracker, _ in
@@ -220,7 +220,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func hasAnyTrackers() -> Bool {
         return !categories.flatMap { $0.trackers }.isEmpty
     }
-
+    
     private var visibleCategories: [TrackerCategory] {
         if isSearching {
             return filteredCategories
@@ -228,7 +228,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         
         return filteredCategories
     }
-
+    
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -241,7 +241,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
     }
-
+    
     
     private func setupTitleLabel() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -290,18 +290,18 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         filterButton.layer.cornerRadius = 16
         filterButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(filterButton)
-            
-            NSLayoutConstraint.activate([
-                filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-                filterButton.widthAnchor.constraint(equalToConstant: 114),
-                filterButton.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
+        
+        NSLayoutConstraint.activate([
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
-            
-            collectionView.contentInset.bottom = 82
-            collectionView.alwaysBounceVertical = true
+        
+        collectionView.contentInset.bottom = 82
+        collectionView.alwaysBounceVertical = true
     }
     
     private func setupConstrait() {
@@ -392,7 +392,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         collectionView.reloadData()
         updatePlaceholder()
     }
-
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
             isSearching = false
@@ -404,7 +404,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         isSearching = true
         filterTrackers(for: searchText)
     }
-
+    
     // MARK: UICollectionView DataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return visibleCategories.count
@@ -423,15 +423,15 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
-
+        
         let isCompletedToday = recordStore.isTrackerCompleted(trackerID: tracker.id, date: selectedDate)
         let completedCount = recordStore.getCompletedCount(for: tracker.id)
-
+        
         cell.configure(with: tracker, completedCount: completedCount, isCompleted: isCompletedToday)
         cell.onCompleteTapped = { [weak self] trackerID in
             self?.handleComplete(trackerID: trackerID)
         }
-
+        
         return cell
     }
     
@@ -478,6 +478,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             recordStore.saveRecord(trackerID: trackerID, date: selectedDate)
         }
         
+        NotificationCenter.default.post(name: .didUpdateTrackerRecords, object: nil)
         completedTrackers = recordStore.loadRecords()
         
         applyFilter(currentFilter)
@@ -492,7 +493,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         }
         return nil
     }
-
+    
     private func updatePlaceholder() {
         let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
         
@@ -522,7 +523,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             }
         }
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -546,7 +547,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         guard let weekday = Weekday(rawValue: adjustedWeekday) else { return [] }
         return category.trackers.filter { $0.schedule.contains(weekday) }
     }
-   
+    
     private func trackersForSearch(in category: TrackerCategory) -> [Tracker] {
         return category.trackers
     }
@@ -558,23 +559,23 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func trackersForVisibleCategory(_ category: TrackerCategory) -> [Tracker] {
         return category.trackers
     }
-
+    
     private func openEditTracker(_ tracker: Tracker) {
         let vc = NewTrackerViewController()
         vc.configureForEdit(tracker: tracker)
-
+        
         vc.onUpdate = { [weak self] updatedTracker in
             self?.trackerStore.updateTracker(updatedTracker)
             self?.loadDataFromCoreData()
         }
-
+        
         vc.modalPresentationStyle = .pageSheet
         if let sheet = vc.sheetPresentationController {
             sheet.detents = [.large()]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 16
         }
-
+        
         present(vc, animated: true)
     }
     
@@ -588,29 +589,29 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         let trackers = trackersForVisibleCategory(category)
         guard indexPath.item < trackers.count else { return nil }
         let tracker = trackers[indexPath.item]
-
+        
         return UIContextMenuConfiguration(
             identifier: indexPath as NSCopying,
             actionProvider: { [weak self] _ in
                 guard let self else { return nil }
-
+                
                 let editAction = UIAction(
                     title: NSLocalizedString("tracker.context.edit", comment: "")
                 ) { _ in
                     self.openEditTracker(tracker)
                 }
-
+                
                 let deleteAction = UIAction(
                     title: NSLocalizedString("tracker.context.delete", comment: ""),
                     attributes: .destructive
                 ) { _ in
                     self.confirmDelete(tracker)
                 }
-
+                
                 return UIMenu(children: [editAction, deleteAction])
             })
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
@@ -626,7 +627,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         
         return UITargetedPreview(view: cell.cardView, parameters: parameters)
     }
-
+    
     func collectionView(
         _ collectionView: UICollectionView,
         previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
@@ -649,12 +650,12 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             message: NSLocalizedString("tracker.delete.confirm.message", comment: ""),
             preferredStyle: .actionSheet
         )
-
+        
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("tracker.delete.confirm.cancel", comment: ""),
             style: .cancel
         ))
-
+        
         alert.addAction(UIAlertAction(
             title: NSLocalizedString("tracker.delete.confirm.delete", comment: ""),
             style: .destructive,
@@ -662,7 +663,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
                 self?.deleteTracker(tracker)
             }
         ))
-
+        
         present(alert, animated: true)
     }
     
