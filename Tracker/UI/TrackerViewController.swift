@@ -171,11 +171,9 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     
     private func setupConstrait() {
         NSLayoutConstraint.activate([
-            // Заголовок
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
-            // Поиск
             searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 7),
             searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -189,7 +187,6 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             searchTextField.leadingAnchor.constraint(equalTo: searchIcon.trailingAnchor, constant: 6),
             searchTextField.centerYAnchor.constraint(equalTo: searchView.centerYAnchor),
             
-            // Empty image
             emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyImage.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 230),
             emptyImage.widthAnchor.constraint(equalToConstant: 80),
@@ -198,7 +195,6 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
             
-            // CollectionView
             collectionView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 24),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -349,4 +345,116 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         guard let weekday = Weekday(rawValue: adjustedWeekday) else { return [] }
         return category.trackers.filter { $0.schedule.contains(weekday) }
     }
+    
+    private func openEditTracker(_ tracker: Tracker) {
+        let vc = NewTrackerViewController()
+        vc.configureForEdit(tracker: tracker)
+
+        vc.onUpdate = { [weak self] updatedTracker in
+            self?.trackerStore.updateTracker(updatedTracker)
+            self?.loadDataFromCoreData()
+        }
+
+        vc.modalPresentationStyle = .pageSheet
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+        }
+
+        present(vc, animated: true)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        contextMenuConfigurationForItemAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+
+        let trackers = trackersForSelectedDate(in: categories[indexPath.section])
+        let tracker = trackers[indexPath.item]
+
+        return UIContextMenuConfiguration(
+            identifier: indexPath as NSCopying,
+            actionProvider: { [weak self] _ in
+                guard let self else { return nil }
+
+                let editAction = UIAction(
+                    title: NSLocalizedString("tracker.context.edit", comment: "")
+                ) { _ in
+                    self.openEditTracker(tracker)
+                }
+
+                let deleteAction = UIAction(
+                    title: NSLocalizedString("tracker.context.delete", comment: ""),
+                    attributes: .destructive
+                ) { _ in
+                    self.confirmDelete(tracker)
+                }
+                
+                return UIMenu(children: [editAction, deleteAction])
+            })
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        
+        guard let indexPath = configuration.identifier as? IndexPath,
+              let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else {
+            return nil
+        }
+        
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        
+        return UITargetedPreview(view: cell.cardView, parameters: parameters)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration
+    ) -> UITargetedPreview? {
+        
+        guard let indexPath = configuration.identifier as? IndexPath,
+              let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else {
+            return nil
+        }
+        
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        
+        return UITargetedPreview(view: cell.cardView, parameters: parameters)
+    }
+    
+    private func confirmDelete(_ tracker: Tracker) {
+        let alert = UIAlertController(
+            title: nil,
+            message: NSLocalizedString("tracker.delete.confirm.message", comment: ""),
+            preferredStyle: .actionSheet
+        )
+
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("tracker.delete.confirm.cancel", comment: ""),
+            style: .cancel
+        ))
+
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("tracker.delete.confirm.delete", comment: ""),
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.deleteTracker(tracker)
+            }
+        ))
+
+        present(alert, animated: true)
+    }
+    
+    private func deleteTracker(_ tracker: Tracker) {
+        trackerStore.deleteTracker(id: tracker.id)
+        recordStore.deleteAllRecords(for: tracker.id)
+        loadDataFromCoreData()
+    }
+
 }

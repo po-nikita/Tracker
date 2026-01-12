@@ -49,6 +49,9 @@
 "newtracker.createButton.title" = "Создать";
 "newTracker.emojiLabel" = "Emoji";
 "newTracker.colorLabel" = "Цвет";
+"editTracker.title" = "Редактирование привычки";
+"editTracker.save" = "Сохранить";
+
 
 // Onboarding
 "onboardingPage.firstTitle" = "Отслеживайте только \n то, что хотите";
@@ -63,3 +66,9 @@
 "tracker.title" = "Трекеры";
 "tracker.search.placeholder" = "Поиск";
 "tracker.emptylabel" = "Что будем отслеживать?";
+"tracker.context.edit" = "Редактировать";
+"tracker.context.delete" = "Удалить";
+"tracker.delete.confirm.title" = "Уверены что хотите удалить трекер?";
+"tracker.delete.confirm.message" = "Уверены что хотите удалить трекер?";
+"tracker.delete.confirm.cancel" = "Отмена";
+"tracker.delete.confirm.delete" = "Удалить";

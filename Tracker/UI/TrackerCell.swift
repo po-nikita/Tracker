@@ -4,7 +4,7 @@ final class TrackerCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     
     // MARK: UI
-    private let cardView = UIView()
+    let cardView = UIView()
     private let emojiLabel = UILabel()
     private let titleLabel = UILabel()
     

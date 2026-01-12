@@ -101,4 +101,39 @@ final class TrackerStore: NSObject {
             return []
         }
     }
+    
+    func deleteTracker(id: UUID) {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+
+        do {
+            if let tracker = try context.fetch(request).first {
+                context.delete(tracker)
+                try context.save()
+            }
+        } catch {
+            print("Ошибка удаления трекера: \(error)")
+        }
+    }
+    
+    func updateTracker(_ tracker: Tracker) {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+
+        do {
+            if let entity = try context.fetch(request).first {
+                entity.name = tracker.name
+                entity.color = tracker.color
+                entity.emoji = tracker.emoji
+
+                let encoder = JSONEncoder()
+                entity.schedule = try encoder.encode(tracker.schedule)
+
+                try context.save()
+            }
+        } catch {
+            print("Ошибка обновления трекера: \(error)")
+        }
+    }
+
 }
