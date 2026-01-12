@@ -33,10 +33,10 @@ final class ScheduleViewController: UIViewController {
         
         tableView.isScrollEnabled = false
         tableView.backgroundColor = .systemGray5
-        tableView.dataSource = self // Контроллер отвечает за данные таблицы.
-        tableView.delegate = self // Контроллер отвечает за поведение таблицы.
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.rowHeight = 75
-        tableView.register(WeekdayCell.self, forCellReuseIdentifier: WeekdayCell.reuseIdentifier) //Регистрируем кастомную ячейку.
+        tableView.register(WeekdayCell.self, forCellReuseIdentifier: WeekdayCell.reuseIdentifier)
         
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 16
