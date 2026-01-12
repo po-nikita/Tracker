@@ -66,6 +66,7 @@
 "tracker.title" = "Трекеры";
 "tracker.search.placeholder" = "Поиск";
 "tracker.emptylabel" = "Что будем отслеживать?";
+"tracker.emptyFound.label" = "Ничего не найдено"
 "tracker.context.edit" = "Редактировать";
 "tracker.context.delete" = "Удалить";
 "tracker.delete.confirm.title" = "Уверены что хотите удалить трекер?";

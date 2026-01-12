@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class TrackerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
     
     private lazy var trackerStore: TrackerStore = {
         guard let context = AppDelegate.context else {
@@ -16,6 +16,10 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         return TrackerRecordStore(context: context)
     }()
     
+    private var filteredCategories: [TrackerCategory] = []
+    private var isSearching: Bool = false
+    private let searchController = UISearchController(searchResultsController: nil)
+
     private let titleLabel = UILabel()
     private let searchView = UIView()
     private let searchIcon = UIImageView()
@@ -38,6 +42,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         
         setupNavigationBar()
         setupTitleLabel()
+        setupSearchController()
         setupSearchView()
         setupSearchIcon()
         setupSearchTextField()
@@ -104,6 +109,19 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         loadDataFromCoreData()
     }
     
+    @objc private func searchTextChanged() {
+        guard let searchText = searchTextField.text, !searchText.isEmpty else {
+            isSearching = false
+            collectionView.reloadData()
+            updatePlaceholder()
+            return
+        }
+
+        isSearching = true
+        filterTrackers(for: searchText)
+    }
+
+
     @objc private func addButtonTapped() {
         let vc = NewTrackerViewController()
         vc.onCreate = { [weak self] tracker, _ in
@@ -127,6 +145,20 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         }
         present(vc, animated: true)
     }
+    
+    private func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        
+        searchTextField.textColor = .black
+        searchTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("tracker.search.placeholder", comment: ""),
+            attributes: [.foregroundColor: UIColor.gray]
+        )
+        searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
+    }
+
     
     private func setupTitleLabel() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -153,7 +185,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchView.addSubview(searchTextField)
         searchTextField.placeholder = NSLocalizedString("tracker.search.placeholder", comment: "")
-        searchTextField.textColor = .ypGrayText
+        searchTextField.textColor = .black
     }
     
     private func setupEmptyImage() {
@@ -226,32 +258,69 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         loadDataFromCoreData()
     }
     
+    private func filterTrackers(for query: String) {
+        let lowercasedQuery = query.lowercased()
+        
+        let allTrackers = trackerStore.loadTrackers()
+        
+        let matchingTrackers = allTrackers.filter { $0.name.lowercased().contains(lowercasedQuery) }
+        
+        var trackersDict: [String: [Tracker]] = [:]
+        for tracker in matchingTrackers {
+            let categoryTitle = tracker.categoryTitle
+            if trackersDict[categoryTitle] == nil {
+                trackersDict[categoryTitle] = []
+            }
+            trackersDict[categoryTitle]?.append(tracker)
+        }
+        
+        filteredCategories = trackersDict.map { title, trackers in
+            TrackerCategory(title: title, trackers: trackers)
+        }
+        
+        collectionView.reloadData()
+        updatePlaceholder()
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text, !searchText.isEmpty else {
+            isSearching = false
+            collectionView.reloadData()
+            updatePlaceholder()
+            return
+        }
+        
+        isSearching = true
+        filterTrackers(for: searchText)
+    }
+
     // MARK: UICollectionView DataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categories.count
+        return isSearching ? filteredCategories.count : categories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return trackersForSelectedDate(in: categories[section]).count
-    }
+        let category = isSearching ? filteredCategories[section] : categories[section]
+        return trackersForSelectedDate(in: category).count
+       }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let trackers = trackersForSelectedDate(in: categories[indexPath.section])
+        let category = isSearching ? filteredCategories[indexPath.section] : categories[indexPath.section]
+        let trackers = trackersForSelectedDate(in: category)
         let tracker = trackers[indexPath.item]
-        
+
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCell.reuseIdentifier, for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
-        
+
         let isCompletedToday = recordStore.isTrackerCompleted(trackerID: tracker.id, date: selectedDate)
-        
         let completedCount = recordStore.getCompletedCount(for: tracker.id)
-        
+
         cell.configure(with: tracker, completedCount: completedCount, isCompleted: isCompletedToday)
         cell.onCompleteTapped = { [weak self] trackerID in
             self?.handleComplete(trackerID: trackerID)
         }
-        
+
         return cell
     }
     
@@ -306,21 +375,42 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     }
     
     private func findIndexPathForTracker(trackerID: UUID) -> IndexPath? {
-        for (sectionIndex, category) in categories.enumerated() {
-            let trackers = trackersForSelectedDate(in: category)
+        let currentCategories = isSearching ? filteredCategories : categories
+        
+        for (sectionIndex, category) in currentCategories.enumerated() {
+            let trackers = isSearching ? trackersForSearch(in: category) : trackersForSelectedDate(in: category)
             if let itemIndex = trackers.firstIndex(where: { $0.id == trackerID }) {
                 return IndexPath(item: itemIndex, section: sectionIndex)
             }
         }
+        
         return nil
     }
-    
+
     private func updatePlaceholder() {
-        let hasTrackers = !categories.flatMap { trackersForSelectedDate(in: $0) }.isEmpty
+        let currentCategories = isSearching ? filteredCategories : categories
+        let hasTrackers = !currentCategories.flatMap { trackersForCategory($0) }.isEmpty
+        
+        collectionView.isHidden = !hasTrackers
         emptyImage.isHidden = hasTrackers
         emptyLabel.isHidden = hasTrackers
-        collectionView.isHidden = !emptyImage.isHidden
+
+        guard !hasTrackers else { return }
+
+        if isSearching {
+            emptyImage.image = UIImage(named: "emptyFound_image") 
+            emptyLabel.text = NSLocalizedString("tracker.emptyFound.label", comment: "")
+        } else {
+            emptyImage.image = UIImage.empty
+            emptyLabel.text = NSLocalizedString("tracker.emptylabel", comment: "")
+        }
     }
+
+    private func trackersForCategory(_ category: TrackerCategory) -> [Tracker] {
+        return isSearching ? trackersForSearch(in: category) : trackersForSelectedDate(in: category)
+    }
+
+
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -345,7 +435,11 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         guard let weekday = Weekday(rawValue: adjustedWeekday) else { return [] }
         return category.trackers.filter { $0.schedule.contains(weekday) }
     }
-    
+   
+    private func trackersForSearch(in category: TrackerCategory) -> [Tracker] {
+        return category.trackers
+    }
+
     private func openEditTracker(_ tracker: Tracker) {
         let vc = NewTrackerViewController()
         vc.configureForEdit(tracker: tracker)
@@ -457,4 +551,11 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         loadDataFromCoreData()
     }
 
+}
+
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
