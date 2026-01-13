@@ -129,11 +129,17 @@ final class TrackerStore: NSObject {
                 let encoder = JSONEncoder()
                 entity.schedule = try encoder.encode(tracker.schedule)
 
+                let categoryRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+                categoryRequest.predicate = NSPredicate(format: "title == %@", tracker.categoryTitle)
+                
+                if let category = try context.fetch(categoryRequest).first {
+                    entity.category = category
+                }
+
                 try context.save()
             }
         } catch {
             print("Ошибка обновления трекера: \(error)")
         }
     }
-
 }
