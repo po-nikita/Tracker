@@ -18,4 +18,27 @@ final class TrackerViewControllerSnapshotTests: XCTestCase {
         
         assertSnapshot(matching: vc, as: .image)
     }
+    
+    func testTrackerViewController_Light() {
+        let vc = TrackerViewController()
+        vc.view.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
+        _ = vc.view
+
+        assertSnapshot(
+            matching: vc,
+            as: .image(traits: .init(userInterfaceStyle: .light))
+        )
+    }
+
+    func testTrackerViewController_Dark() {
+        let vc = TrackerViewController()
+        vc.view.frame = CGRect(x: 0, y: 0, width: 375, height: 812)
+        _ = vc.view
+
+        assertSnapshot(
+            matching: vc,
+            as: .image(traits: .init(userInterfaceStyle: .dark))
+        )
+    }
+
 }
