@@ -98,9 +98,18 @@ final class TrackerCell: UICollectionViewCell {
         
         let imageName = isCompleted ? "checkmark" : "plus"
         actionButton.setImage(UIImage(systemName: imageName), for: .normal)
-        actionButton.backgroundColor = .systemGreen
+        actionButton.backgroundColor = UIColor(hex: tracker.color)
+        
+        actionButton.tintColor = traitCollection.userInterfaceStyle == .dark ? .black : .white
     }
-    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            actionButton.tintColor = traitCollection.userInterfaceStyle == .dark ? .black : .white
+        }
+    }
+
 }
 
 extension String {

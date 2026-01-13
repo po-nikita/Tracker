@@ -282,7 +282,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     private func setupSearchTextField() {
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchView.addSubview(searchTextField)
-        searchTextField.textColor = .label 
+        searchTextField.textColor = .label
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: NSLocalizedString("tracker.search.placeholder", comment: ""),
             attributes: [.foregroundColor: Colors.searchText]
@@ -514,23 +514,24 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     }
     
     private func updatePlaceholder() {
-        let hasTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
+        let hasTrackersInSystem = !categories.isEmpty
+        let hasVisibleTrackers = !visibleCategories.flatMap { $0.trackers }.isEmpty
         
-        collectionView.isHidden = !hasTrackers
-        emptyImage.isHidden = hasTrackers
-        emptyLabel.isHidden = hasTrackers
+        collectionView.isHidden = !hasVisibleTrackers
+        emptyImage.isHidden = hasVisibleTrackers
+        emptyLabel.isHidden = hasVisibleTrackers
         
-        filterButton.isHidden = !hasAnyTrackers()
+        filterButton.isHidden = !hasTrackersInSystem
         
         if isSearching {
             emptyImage.image = UIImage(named: "emptyFound_image")
             emptyLabel.text = NSLocalizedString("tracker.emptyFound.label", comment: "")
+        } else if !hasTrackersInSystem {
+            emptyImage.image = UIImage.empty
+            emptyLabel.text = NSLocalizedString("tracker.emptylabel", comment: "")
         } else {
             switch currentFilter {
-            case .all:
-                emptyImage.image = UIImage(named: "emptyFound_image")
-                emptyLabel.text = NSLocalizedString("tracker.emptyFound.label", comment: "")
-            case .today:
+            case .all, .today:
                 emptyImage.image = UIImage(named: "emptyFound_image")
                 emptyLabel.text = NSLocalizedString("tracker.emptyFound.label", comment: "")
             case .completed:
