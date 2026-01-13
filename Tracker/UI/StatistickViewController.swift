@@ -44,7 +44,8 @@ final class StatistickViewController: UIViewController {
         emptyLabel.text = NSLocalizedString("statistick.emptylabel", comment: "")
         emptyLabel.font = .systemFont(ofSize: 14)
         emptyLabel.textAlignment = .center
-        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.textColor = .label
+        
         view.addSubview(emptyLabel)
         
         NSLayoutConstraint.activate([
