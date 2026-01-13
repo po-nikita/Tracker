@@ -7,7 +7,9 @@ final class TabBarController: UITabBarController {
         setupTabBarAppearance()
         
         let trackerVC = TrackerViewController()
-        trackerVC.view.backgroundColor = .systemBackground
+        trackerVC.view.backgroundColor = UIColor { trait in
+            trait.userInterfaceStyle == .dark ? Colors.WhiteNight : .systemBackground }
+        
         trackerVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("tab.trackers", comment: "trackers tab title"),
             image: UIImage.trackersTabbarIcon,
@@ -15,7 +17,9 @@ final class TabBarController: UITabBarController {
         )
         
         let statisticVC = StatistickViewController()
-        statisticVC.view.backgroundColor = .systemBackground
+        statisticVC.view.backgroundColor = UIColor { trait in
+            trait.userInterfaceStyle == .dark ? Colors.WhiteNight : .systemBackground }
+        
         statisticVC.tabBarItem = UITabBarItem(
             title: NSLocalizedString("tab.statistics", comment: "statistics tab title"),
             image: UIImage.statisticTabbarIcon,

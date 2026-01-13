@@ -17,7 +17,8 @@ final class StatisticCardView: UIView {
     
     private func setup(number: String, title: String) {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .systemBackground
+        backgroundColor = UIColor { trait in
+            trait.userInterfaceStyle == .dark ? Colors.WhiteNight : .systemBackground }
         layer.cornerRadius = 16
         layer.masksToBounds = true
         
