@@ -316,7 +316,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         view.addSubview(emptyLabel)
         emptyLabel.text = NSLocalizedString("tracker.emptylabel", comment: "")
         emptyLabel.font = .systemFont(ofSize: 12)
-        emptyLabel.textColor = .secondaryLabel
+        emptyLabel.textColor = .label
     }
     private func setupFilterButton() {
         filterButton.setTitle(NSLocalizedString("tracker.filters.button", comment: ""), for: .normal)
