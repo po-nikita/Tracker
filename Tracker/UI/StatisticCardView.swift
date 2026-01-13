@@ -26,8 +26,8 @@ final class StatisticCardView: UIView {
             UIColor(red: 70/255, green: 230/255, blue: 157/255, alpha: 1).cgColor,
             UIColor(red: 253/255, green: 76/255, blue: 73/255, alpha: 1).cgColor
         ]
-        gradientBorder.startPoint = CGPoint(x: 0, y: 0)
-        gradientBorder.endPoint = CGPoint(x: 1, y: 0)
+        gradientBorder.startPoint = CGPoint(x: 1, y: 0)
+        gradientBorder.endPoint = CGPoint(x: 0, y: 0)
         layer.addSublayer(gradientBorder)
         
         shapeLayer.strokeColor = UIColor.label.cgColor
