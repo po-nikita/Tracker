@@ -88,7 +88,16 @@ extension FiltersViewController: UITableViewDataSource, UITableViewDelegate {
         cell.selectionStyle = .none
         cell.backgroundColor = .clear
 
-        cell.accessoryType = filter == currentFilter ? .checkmark : .none
+        let shouldShowCheckmark: Bool = {
+            switch filter {
+            case .completed, .uncompleted:
+                return filter == currentFilter
+            case .all, .today:
+                return false
+            }
+        }()
+
+        cell.accessoryType = shouldShowCheckmark ? .checkmark : .none
         cell.tintColor = .systemBlue
 
         return cell
