@@ -84,4 +84,11 @@ enum Colors {
             trait.userInterfaceStyle == .dark ? .white : .systemGray6
         }
     }
+    
+    static var WhiteNight = UIColor(
+            red: 26/255,
+            green: 27/255,
+            blue: 34/255,
+            alpha: 1
+        )
 }

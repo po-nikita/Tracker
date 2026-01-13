@@ -32,7 +32,10 @@ final class TabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         
-        appearance.backgroundColor = .systemBackground
+        appearance.backgroundColor = UIColor { trait in
+            trait.userInterfaceStyle == .dark ? Colors.WhiteNight : .systemBackground
+        }
+        
         appearance.shadowColor = .separator
         
         tabBar.standardAppearance = appearance
