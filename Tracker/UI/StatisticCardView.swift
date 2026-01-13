@@ -17,7 +17,7 @@ final class StatisticCardView: UIView {
     
     private func setup(number: String, title: String) {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .clear
+        backgroundColor = .systemBackground
         layer.cornerRadius = 16
         layer.masksToBounds = true
         
@@ -30,20 +30,20 @@ final class StatisticCardView: UIView {
         gradientBorder.endPoint = CGPoint(x: 1, y: 0)
         layer.addSublayer(gradientBorder)
         
-        shapeLayer.strokeColor = UIColor.black.cgColor
+        shapeLayer.strokeColor = UIColor.label.cgColor
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.lineWidth = 1
         gradientBorder.mask = shapeLayer
         
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         numberLabel.font = .systemFont(ofSize: 34, weight: .bold)
-        numberLabel.textColor = .black
+        numberLabel.textColor = .label
         numberLabel.text = number
         addSubview(numberLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        titleLabel.textColor = .black
+        titleLabel.textColor = .label
         titleLabel.text = title
         addSubview(titleLabel)
         

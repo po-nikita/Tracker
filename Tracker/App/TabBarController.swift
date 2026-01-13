@@ -4,29 +4,40 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupTabBarSeparator()
+        setupTabBarAppearance()
         
         let trackerVC = TrackerViewController()
-        trackerVC.view.backgroundColor = .white
-        trackerVC.tabBarItem = UITabBarItem(title: NSLocalizedString("tab.trackers", comment: "trackers tab titile"), image: UIImage.trackersTabbarIcon , tag: 0)
+        trackerVC.view.backgroundColor = .systemBackground
+        trackerVC.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("tab.trackers", comment: "trackers tab title"),
+            image: UIImage.trackersTabbarIcon,
+            tag: 0
+        )
         
         let statisticVC = StatistickViewController()
-        statisticVC.view.backgroundColor = .white
-        statisticVC.tabBarItem = UITabBarItem(title: NSLocalizedString("tab.statistics", comment: "statistic tab title"), image: UIImage.statisticTabbarIcon, tag: 1)
+        statisticVC.view.backgroundColor = .systemBackground
+        statisticVC.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("tab.statistics", comment: "statistics tab title"),
+            image: UIImage.statisticTabbarIcon,
+            tag: 1
+        )
         
         viewControllers = [
             UINavigationController(rootViewController: trackerVC),
-            UINavigationController(rootViewController: statisticVC)]
+            UINavigationController(rootViewController: statisticVC)
+        ]
     }
     
-    private func setupTabBarSeparator() {
+    private func setupTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         
-        appearance.backgroundColor = .white
-        appearance.shadowColor = UIColor.systemGray4
+        appearance.backgroundColor = .systemBackground
+        appearance.shadowColor = .separator
         
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
+        tabBar.tintColor = nil
+        tabBar.unselectedItemTintColor = nil
     }
 }

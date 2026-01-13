@@ -9,7 +9,7 @@ final class StatistickViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.systemBackground
         setupTitle()
         setupEmptyViews()
         NotificationCenter.default.addObserver(self, selector: #selector(didUpdateRecords), name: .didUpdateTrackerRecords, object: nil)
@@ -28,6 +28,7 @@ final class StatistickViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = NSLocalizedString("statistick.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 34, weight: .bold)
+        titleLabel.textColor = .label
         view.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
@@ -43,6 +44,7 @@ final class StatistickViewController: UIViewController {
         emptyLabel.text = NSLocalizedString("statistick.emptylabel", comment: "")
         emptyLabel.font = .systemFont(ofSize: 14)
         emptyLabel.textAlignment = .center
+        emptyLabel.textColor = .secondaryLabel
         view.addSubview(emptyLabel)
         
         NSLayoutConstraint.activate([

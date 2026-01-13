@@ -11,7 +11,7 @@ final class ScheduleViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         title = NSLocalizedString("schedule.title", comment: "")
         setupTableView()
         setupTitle()
@@ -22,6 +22,7 @@ final class ScheduleViewController: UIViewController {
     private func setupTitle() {
         titleLabel.text = NSLocalizedString("schedule.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -32,7 +33,7 @@ final class ScheduleViewController: UIViewController {
         view.addSubview(tableView)
         
         tableView.isScrollEnabled = false
-        tableView.backgroundColor = .systemGray5
+        tableView.backgroundColor = .secondarySystemBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 75
@@ -42,8 +43,7 @@ final class ScheduleViewController: UIViewController {
         tableView.layer.cornerRadius = 16
         tableView.clipsToBounds = true
         
-        tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .systemGray
+        tableView.separatorColor = Colors.separatorColorGray
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
@@ -53,8 +53,8 @@ final class ScheduleViewController: UIViewController {
     
     private func setupDoneButton() {
         doneButton.setTitle(NSLocalizedString("schedule.doneButton.title", comment: ""), for: .normal)
-        doneButton.setTitleColor(.white, for: .normal)
-        doneButton.backgroundColor = .black
+        doneButton.setTitleColor(UIColor { $0.userInterfaceStyle == .dark ? .black : .white }, for: .normal)
+        doneButton.backgroundColor = .label
         doneButton.layer.cornerRadius = 16
         doneButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         doneButton.translatesAutoresizingMaskIntoConstraints = false

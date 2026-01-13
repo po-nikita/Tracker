@@ -36,7 +36,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - Setup Views
     
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         [titleLabel, emptyImage, emptyLabel, containerView, addButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -50,6 +50,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
         titleLabel.text = NSLocalizedString("category.titleLabel", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textAlignment = .center
+        titleLabel.textColor = .label
     }
     
     private func setupEmptyLabel() {
@@ -57,6 +58,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
         emptyLabel.numberOfLines = 0
         emptyLabel.textAlignment = .center
         emptyLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        emptyLabel.textColor = .label
     }
     
     private func setupEmptyImage() {
@@ -65,8 +67,13 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     
     private func setupAddButton() {
         addButton.setTitle(NSLocalizedString("category.button.addCategory", comment: ""), for: .normal)
-        addButton.setTitleColor(.white, for: .normal)
-        addButton.backgroundColor = .black
+        addButton.backgroundColor = Colors.createButtonEnabled
+            addButton.setTitleColor(
+                UIColor { trait in
+                    trait.userInterfaceStyle == .dark ? .black : .white
+                },
+                for: .normal
+            )
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         addButton.layer.cornerRadius = 16
         addButton.addTarget(self, action: #selector(addCategoryTapped), for: .touchUpInside)
@@ -83,7 +90,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
         tableView.rowHeight = 75
         tableView.alwaysBounceVertical = true
         
-        containerView.backgroundColor = .systemGray6
+        containerView.backgroundColor = .secondarySystemBackground
         containerView.layer.cornerRadius = 16
         containerView.clipsToBounds = true
     }

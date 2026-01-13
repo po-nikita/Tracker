@@ -14,7 +14,7 @@ final class FiltersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         setupTitle()
         setupTableView()
         setupLayout()
@@ -22,6 +22,7 @@ final class FiltersViewController: UIViewController {
     
     private func setupTitle() {
         titleLabel.text = NSLocalizedString("filters.title", comment: "")
+        titleLabel.textColor = .label
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -30,7 +31,7 @@ final class FiltersViewController: UIViewController {
     
     private func setupTableView() {
         tableContainer.translatesAutoresizingMaskIntoConstraints = false
-        tableContainer.backgroundColor = .systemGray6
+        tableContainer.backgroundColor = Colors.dimanicWeekdayCell
         tableContainer.layer.cornerRadius = 16
         tableContainer.clipsToBounds = true
         view.addSubview(tableContainer)
@@ -49,7 +50,7 @@ final class FiltersViewController: UIViewController {
         tableView.tableFooterView = footerView
 
         tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .systemGray
+        tableView.separatorColor = Colors.separatorColorGray
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 
         tableView.rowHeight = 75

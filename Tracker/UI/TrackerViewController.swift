@@ -15,7 +15,6 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         }
         return TrackerRecordStore(context: context)
     }()
-    
     private var filteredCategories: [TrackerCategory] = []
     private var isSearching: Bool = false
     private let searchController = UISearchController(searchResultsController: nil)
@@ -39,7 +38,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         setupNavigationBar()
         setupTitleLabel()
@@ -94,15 +93,30 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
             target: self,
             action: #selector(addButtonTapped)
         )
-        addButton.tintColor = .black
+        addButton.tintColor = .label
         navigationItem.leftBarButtonItem = addButton
         
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
+        applyDatePickerStyle(for: traitCollection.userInterfaceStyle)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
+    }
+    
+    private func applyDatePickerStyle(for style: UIUserInterfaceStyle) {
+        if style == .dark {
+            datePicker.backgroundColor = .white
+            datePicker.overrideUserInterfaceStyle = .light
+            datePicker.layer.cornerRadius = 8
+            datePicker.layer.masksToBounds = true
+        } else {
+            datePicker.backgroundColor = .clear
+            datePicker.overrideUserInterfaceStyle = .unspecified
+            datePicker.layer.cornerRadius = 0
+            datePicker.layer.masksToBounds = false
+        }
     }
     
     private func applyFilter(_ filter: TrackerFilter) {
@@ -233,10 +247,10 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         
-        searchTextField.textColor = .black
+        searchTextField.textColor = .label
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: NSLocalizedString("tracker.search.placeholder", comment: ""),
-            attributes: [.foregroundColor: UIColor.gray]
+            attributes: [.foregroundColor: UIColor.label]
         )
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(searchTextChanged), for: .editingChanged)
@@ -248,12 +262,13 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         view.addSubview(titleLabel)
         titleLabel.text = NSLocalizedString("tracker.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 41, weight: .bold)
+        titleLabel.textColor = .label
     }
     
     private func setupSearchView() {
         searchView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchView)
-        searchView.backgroundColor = UIColor.systemGray5
+        searchView.backgroundColor = .secondarySystemBackground
         searchView.layer.cornerRadius = 10
     }
     
@@ -261,14 +276,17 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         searchIcon.translatesAutoresizingMaskIntoConstraints = false
         searchView.addSubview(searchIcon)
         searchIcon.image = UIImage.mangnifyingglass
-        searchIcon.tintColor = .gray
+        searchIcon.tintColor = .label
     }
     
     private func setupSearchTextField() {
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         searchView.addSubview(searchTextField)
-        searchTextField.placeholder = NSLocalizedString("tracker.search.placeholder", comment: "")
-        searchTextField.textColor = .black
+        searchTextField.textColor = .label 
+        searchTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("tracker.search.placeholder", comment: ""),
+            attributes: [.foregroundColor: Colors.searchText]
+        )
     }
     
     private func setupEmptyImage() {
@@ -282,6 +300,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         view.addSubview(emptyLabel)
         emptyLabel.text = NSLocalizedString("tracker.emptylabel", comment: "")
         emptyLabel.font = .systemFont(ofSize: 12)
+        emptyLabel.textColor = .secondaryLabel
     }
     private func setupFilterButton() {
         filterButton.setTitle(NSLocalizedString("tracker.filters.button", comment: ""), for: .normal)

@@ -118,14 +118,16 @@ final class NewTrackerViewController: UIViewController {
     private func setupTitle() {
         titleLabel.text = NSLocalizedString("newTracker.title", comment: "")
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        titleLabel.textColor = .black
+        titleLabel.textColor = .label
     }
-    
     private func setupNameTextField() {
-        nameTextField.placeholder = NSLocalizedString("newTracker.placeholder", comment: "")
-        nameTextField.backgroundColor = UIColor.systemGray6
+        nameTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("newTracker.placeholder", comment: ""),
+            attributes: [.foregroundColor: UIColor.secondaryLabel]
+        )
+        nameTextField.backgroundColor = UIColor.secondarySystemBackground
         nameTextField.layer.cornerRadius = 10
-        nameTextField.textColor = .black
+        nameTextField.textColor = .label
         nameTextField.setLeftPadding(16)
         nameTextField.delegate = self
     }
@@ -138,11 +140,11 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupOptionsContainer() {
-        optionsContainerView.backgroundColor = .systemGray6
+        optionsContainerView.backgroundColor = .secondarySystemBackground
         optionsContainerView.layer.cornerRadius = 16
         
         categoryButton.setTitle(NSLocalizedString("newTracker.categoryButton.title", comment: ""), for: .normal)
-        categoryButton.setTitleColor(.black, for: .normal)
+        categoryButton.setTitleColor(.label, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +152,7 @@ final class NewTrackerViewController: UIViewController {
         categoryButton.addTarget(self, action: #selector(selectCategoryTapped), for: .touchUpInside)
         
         scheduleButton.setTitle(NSLocalizedString("newTracker.scheduleButton.title", comment: ""), for: .normal)
-        scheduleButton.setTitleColor(.black, for: .normal)
+        scheduleButton.setTitleColor(.label, for: .normal)
         scheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
         scheduleButton.translatesAutoresizingMaskIntoConstraints = false
@@ -161,17 +163,17 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.configuration = config
         scheduleButton.addTarget(self, action: #selector(scheduleButtonTapped), for: .touchUpInside)
         
-        separatorView.backgroundColor = .systemGray4
+        separatorView.backgroundColor = Colors.separatorColor
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         
         scheduleDescriptionLabel.font = .systemFont(ofSize: 17)
-        scheduleDescriptionLabel.textColor = .systemGray
+        scheduleDescriptionLabel.textColor = .secondaryLabel
         scheduleDescriptionLabel.numberOfLines = 1
         scheduleDescriptionLabel.isHidden = true
         scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         categoryDescriptionLabel.font = .systemFont(ofSize: 17)
-        categoryDescriptionLabel.textColor = .systemGray
+        categoryDescriptionLabel.textColor = .secondaryLabel
         categoryDescriptionLabel.numberOfLines = 1
         categoryDescriptionLabel.isHidden = true
         categoryDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -220,7 +222,7 @@ final class NewTrackerViewController: UIViewController {
     private func addChevronIcon(to button: UIButton) {
         let chevronImage = UIImage(systemName: "chevron.right")
         let icon = UIImageView(image: chevronImage)
-        icon.tintColor = .gray
+        icon.tintColor = Colors.chevronColor
         icon.translatesAutoresizingMaskIntoConstraints = false
         button.addSubview(icon)
         NSLayoutConstraint.activate([
@@ -244,26 +246,32 @@ final class NewTrackerViewController: UIViewController {
     
     private func setupCreateButton() {
         createButton.setTitle(NSLocalizedString("newtracker.createButton.title", comment: ""), for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         createButton.layer.cornerRadius = 16
         createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.backgroundColor = .systemGray
+
         createButton.isEnabled = false
+
+        createButton.setTitleColor(Colors.createButtonTitleEnabled, for: .normal)
+        createButton.setTitleColor(Colors.createButtonTitleDisabled, for: .disabled)
+
+        createButton.backgroundColor = Colors.createButtonDisabled
+
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         view.addSubview(createButton)
     }
+
     
     private func setupEmojiTitleLabel() {
         emojiTitleLabel.text = NSLocalizedString("newTracker.emojiLabel", comment: "")
         emojiTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-        emojiTitleLabel.textColor = .black
+        emojiTitleLabel.textColor = .label
     }
     
     private func setupColorTitleLabel() {
         colorTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
         colorTitleLabel.text = NSLocalizedString("newTracker.colorLabel", comment: "")
-        colorTitleLabel.textColor = .black
+        colorTitleLabel.textColor = .label
     }
     
     // MARK: - Layout
@@ -597,7 +605,9 @@ final class NewTrackerViewController: UIViewController {
         let isEnabled = isNameValid && hasSelectedDays && hasEmoji && hasColor && hasCategory
         
         createButton.isEnabled = isEnabled
-        createButton.backgroundColor = isEnabled ? .black : .systemGray
+        createButton.backgroundColor = isEnabled
+                ? Colors.createButtonEnabled
+                : Colors.createButtonDisabled
     }
     
 }
