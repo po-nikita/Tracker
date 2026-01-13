@@ -1,13 +1,21 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    private var selectedWeekDays: Set<Weekday> = []
-    var onDone: ((Set<Weekday>) -> Void)? 
+    private var selectedWeekDays: Set<Weekday>
+    var onDone: ((Set<Weekday>) -> Void)?
     
     private let doneButton = UIButton()
     private let titleLabel = UILabel()
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let weekdays = Weekday.allCases
+    
+    init(selectedDays: Set<Weekday> = []) {
+        self.selectedWeekDays = selectedDays
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +88,7 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
-    @objc private func doneButtonTapped() { // при нажатии на готово передает замыкание с выбранными днями
+    @objc private func doneButtonTapped() { 
         onDone?(selectedWeekDays)
         dismiss(animated: true)
     }
@@ -92,24 +100,25 @@ extension ScheduleViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WeekdayCell.reuseIdentifier, for: indexPath) as? WeekdayCell else {
             return UITableViewCell()
         }
         
-        let day = weekdays[indexPath.row] // Получаем конкретный день по индексу строки.
-        let isOn = selectedWeekDays.contains(day) // Проверяем: выбран ли этот день.
+        let day = weekdays[indexPath.row]
+        let isOn = selectedWeekDays.contains(day)
         
-        cell.configure(day: day, isOn: isOn) //Настраиваем ячейку.
+        cell.configure(day: day, isOn: isOn)
         
-        cell.onSwitchChanged = { [weak self] isOn in // Подписываемся на переключение switch.
-            
-            guard let self else {return}
+        cell.onSwitchChanged = { [weak self] isOn in
+            guard let self else { return }
             if isOn {
                 self.selectedWeekDays.insert(day)
-            }else {
+            } else {
                 self.selectedWeekDays.remove(day)
             }
         }
+        
         return cell
     }
     

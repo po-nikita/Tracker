@@ -496,8 +496,8 @@ final class NewTrackerViewController: UIViewController {
     }
     
     @objc private func scheduleButtonTapped() {
-        let scheduleVc = ScheduleViewController()
-        scheduleVc.onDone = {[weak self] selectedDays in
+        let scheduleVc = ScheduleViewController(selectedDays: Set(selectedWeekDays))
+        scheduleVc.onDone = { [weak self] selectedDays in
             self?.selectedWeekDays = selectedDays.sorted { $0.rawValue < $1.rawValue }
             self?.updateScheduleLabel()
             self?.updateCreateButtonState()
@@ -510,6 +510,7 @@ final class NewTrackerViewController: UIViewController {
         }
         present(scheduleVc, animated: true)
     }
+
     
     private func updateScheduleLabel() {
         guard !selectedWeekDays.isEmpty else {
