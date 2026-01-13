@@ -1,5 +1,4 @@
 import UIKit
-
 final class TrackerViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
     
     private lazy var trackerStore: TrackerStore = {
@@ -15,6 +14,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         }
         return TrackerRecordStore(context: context)
     }()
+    
     private var filteredCategories: [TrackerCategory] = []
     private var isSearching: Bool = false
     private let searchController = UISearchController(searchResultsController: nil)
@@ -64,6 +64,18 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         loadDataFromCoreData()
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        AnaliticHelper.report(event: "open", screen: "Main")
+
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnaliticHelper.report(event: "close", screen: "Main")
+    }
+
     
     private func loadDataFromCoreData() {
         let allTrackers = trackerStore.loadTrackers()
@@ -176,6 +188,8 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     }
     
     @objc private func filterButtonTapped() {
+        AnaliticHelper.report(event: "click", screen: "Main", item: "filter")
+
         let filtersVC = FiltersViewController()
         filtersVC.currentFilter = currentFilter
         filtersVC.onSelectFilter = { [weak self] filter in
@@ -209,6 +223,8 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
     
     
     @objc private func addButtonTapped() {
+        AnaliticHelper.report(event: "click", screen: "Main", item: "add_track")
+
         let vc = NewTrackerViewController()
         vc.onCreate = { [weak self] tracker, _ in
             self?.addTracker(tracker)
@@ -501,6 +517,8 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
         completedTrackers = recordStore.loadRecords()
         
         applyFilter(currentFilter)
+        
+        AnaliticHelper.report(event: "click", screen: "Main", item: "track")
     }
     
     private func findIndexPathForTracker(trackerID: UUID) -> IndexPath? {
@@ -619,6 +637,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
                     title: NSLocalizedString("tracker.context.edit", comment: "")
                 ) { _ in
                     self.openEditTracker(tracker)
+                    AnaliticHelper.report(event: "click", screen: "Main", item: "edit")
                 }
                 
                 let deleteAction = UIAction(
@@ -626,6 +645,7 @@ final class TrackerViewController: UIViewController, UICollectionViewDataSource,
                     attributes: .destructive
                 ) { _ in
                     self.confirmDelete(tracker)
+                    AnaliticHelper.report(event: "click", screen: "Main", item: "delete")
                 }
                 
                 return UIMenu(children: [editAction, deleteAction])

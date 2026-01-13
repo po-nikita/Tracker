@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		31D6F6E82F15C70200648A9C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 31D6F6E72F15C70200648A9C /* SnapshotTesting */; };
+		31D6F9D52F1699A800648A9C /* YandexMobileMetrica in Frameworks */ = {isa = PBXBuildFile; productRef = 31D6F9D42F1699A800648A9C /* YandexMobileMetrica */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31D6F9D52F1699A800648A9C /* YandexMobileMetrica in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +132,7 @@
 			);
 			name = Tracker;
 			packageProductDependencies = (
+				31D6F9D42F1699A800648A9C /* YandexMobileMetrica */,
 			);
 			productName = Tracker;
 			productReference = 31C970062ECCDD9900DFDDD2 /* Tracker.app */;
@@ -217,6 +220,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				31D6F6E62F15C70200648A9C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				31D6F9D32F1699A800648A9C /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 31C970072ECCDD9900DFDDD2 /* Products */;
@@ -589,6 +593,14 @@
 				minimumVersion = 1.18.7;
 			};
 		};
+		31D6F9D32F1699A800648A9C /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yandexmobile/metrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -596,6 +608,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 31D6F6E62F15C70200648A9C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
 			productName = SnapshotTesting;
+		};
+		31D6F9D42F1699A800648A9C /* YandexMobileMetrica */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 31D6F9D32F1699A800648A9C /* XCRemoteSwiftPackageReference "metrica-sdk-ios" */;
+			productName = YandexMobileMetrica;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
