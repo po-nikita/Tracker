@@ -1,4 +1,5 @@
 import UIKit
+import CoreData
 
 final class NewTrackerViewController: UIViewController {
     private let scrollView = UIScrollView()
@@ -20,7 +21,6 @@ final class NewTrackerViewController: UIViewController {
     private let categoryDescriptionLabel = UILabel()
     private var categoryDescriptionTopConstraint: NSLayoutConstraint!
     
-    
     private let emojiTitleLabel = UILabel()
     private let emojis = TrackerEmoji.all
     private var selectedEmoji: String?
@@ -39,13 +39,23 @@ final class NewTrackerViewController: UIViewController {
     var onCategoryDeleted: (() -> Void)?
     var onCategoryUpdated: (() -> Void)?
     
+    private var trackerToEdit: Tracker?
+    var onUpdate: ((Tracker) -> Void)?
+    private let completedCountLabel = UILabel()
+    private var completedCountLabelHeightConstraint: NSLayoutConstraint!
+    private var completedCountLabelTopConstraint: NSLayoutConstraint!
     
+    private lazy var recordStore: TrackerRecordStore = {
+        guard let context = AppDelegate.context else { fatalError("No Core Data context") }
+        return TrackerRecordStore(context: context)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupScrollView()
         
+        setupCompletedCountLabel()
         setupCancelButton()
         setupCreateButton()
         setupTitle()
@@ -58,6 +68,10 @@ final class NewTrackerViewController: UIViewController {
         setupColorCollectionView()
         
         setupLayout()
+        
+        if let tracker = trackerToEdit {
+            fillFieldsForEdit(tracker)
+        }
         
         registerForKeyboardNotifications()
     }
@@ -82,42 +96,63 @@ final class NewTrackerViewController: UIViewController {
         }
     }
     
-    private func setupTitle() {
-        titleLabel.text = "Новая привычка"
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        titleLabel.textColor = .black
+    private func setupCompletedCountLabel() {
+        completedCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        completedCountLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        completedCountLabel.textColor = .label
+        completedCountLabel.textAlignment = .center
+        completedCountLabel.isHidden = true
+        contentView.addSubview(completedCountLabel)
+        
+        completedCountLabelHeightConstraint = completedCountLabel.heightAnchor.constraint(equalToConstant: 0)
+        completedCountLabelHeightConstraint.isActive = true
+        
+        completedCountLabelTopConstraint = completedCountLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 0)
+        completedCountLabelTopConstraint.isActive = true
+        
+        completedCountLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
     
+    
+    
+    private func setupTitle() {
+        titleLabel.text = NSLocalizedString("newTracker.title", comment: "")
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        titleLabel.textColor = .label
+    }
     private func setupNameTextField() {
-        nameTextField.placeholder = "Введите название трекера"
-        nameTextField.backgroundColor = UIColor.systemGray6
+        nameTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("newTracker.placeholder", comment: ""),
+            attributes: [.foregroundColor: UIColor.secondaryLabel]
+        )
+        nameTextField.backgroundColor = UIColor.secondarySystemBackground
         nameTextField.layer.cornerRadius = 10
-        nameTextField.textColor = .black
+        nameTextField.textColor = .label
         nameTextField.setLeftPadding(16)
         nameTextField.delegate = self
     }
     
     private func setupErrorLabel() {
-        errorLabel.text = "Ограничение 38 символов"
+        errorLabel.text = NSLocalizedString("newTracker.errorLabel", comment: "")
         errorLabel.font = UIFont.systemFont(ofSize: 17)
         errorLabel.textColor = .red
         errorLabel.isHidden = true
     }
     
     private func setupOptionsContainer() {
-        optionsContainerView.backgroundColor = .systemGray6
+        optionsContainerView.backgroundColor = .secondarySystemBackground
         optionsContainerView.layer.cornerRadius = 16
         
-        categoryButton.setTitle("Категория", for: .normal)
-        categoryButton.setTitleColor(.black, for: .normal)
+        categoryButton.setTitle(NSLocalizedString("newTracker.categoryButton.title", comment: ""), for: .normal)
+        categoryButton.setTitleColor(.label, for: .normal)
         categoryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         categoryButton.contentHorizontalAlignment = .left
         categoryButton.translatesAutoresizingMaskIntoConstraints = false
         addChevronIcon(to: categoryButton)
         categoryButton.addTarget(self, action: #selector(selectCategoryTapped), for: .touchUpInside)
         
-        scheduleButton.setTitle("Расписание", for: .normal)
-        scheduleButton.setTitleColor(.black, for: .normal)
+        scheduleButton.setTitle(NSLocalizedString("newTracker.scheduleButton.title", comment: ""), for: .normal)
+        scheduleButton.setTitleColor(.label, for: .normal)
         scheduleButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         scheduleButton.contentHorizontalAlignment = .left
         scheduleButton.translatesAutoresizingMaskIntoConstraints = false
@@ -128,17 +163,17 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.configuration = config
         scheduleButton.addTarget(self, action: #selector(scheduleButtonTapped), for: .touchUpInside)
         
-        separatorView.backgroundColor = .systemGray4
+        separatorView.backgroundColor = Colors.separatorColor
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         
         scheduleDescriptionLabel.font = .systemFont(ofSize: 17)
-        scheduleDescriptionLabel.textColor = .systemGray
+        scheduleDescriptionLabel.textColor = .secondaryLabel
         scheduleDescriptionLabel.numberOfLines = 1
         scheduleDescriptionLabel.isHidden = true
         scheduleDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         categoryDescriptionLabel.font = .systemFont(ofSize: 17)
-        categoryDescriptionLabel.textColor = .systemGray
+        categoryDescriptionLabel.textColor = .secondaryLabel
         categoryDescriptionLabel.numberOfLines = 1
         categoryDescriptionLabel.isHidden = true
         categoryDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -187,7 +222,7 @@ final class NewTrackerViewController: UIViewController {
     private func addChevronIcon(to button: UIButton) {
         let chevronImage = UIImage(systemName: "chevron.right")
         let icon = UIImageView(image: chevronImage)
-        icon.tintColor = .gray
+        icon.tintColor = Colors.chevronColor
         icon.translatesAutoresizingMaskIntoConstraints = false
         button.addSubview(icon)
         NSLayoutConstraint.activate([
@@ -197,7 +232,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitle(NSLocalizedString("newtracker.cancelButton.title", comment: ""), for: .normal)
         cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         cancelButton.backgroundColor = .clear
@@ -210,27 +245,33 @@ final class NewTrackerViewController: UIViewController {
     }
     
     private func setupCreateButton() {
-        createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(.white, for: .normal)
+        createButton.setTitle(NSLocalizedString("newtracker.createButton.title", comment: ""), for: .normal)
         createButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         createButton.layer.cornerRadius = 16
         createButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.backgroundColor = .systemGray
+
         createButton.isEnabled = false
+
+        createButton.setTitleColor(Colors.createButtonTitleEnabled, for: .normal)
+        createButton.setTitleColor(Colors.createButtonTitleDisabled, for: .disabled)
+
+        createButton.backgroundColor = Colors.createButtonDisabled
+
         createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         view.addSubview(createButton)
     }
+
     
     private func setupEmojiTitleLabel() {
-        emojiTitleLabel.text = "Emoji"
+        emojiTitleLabel.text = NSLocalizedString("newTracker.emojiLabel", comment: "")
         emojiTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-        emojiTitleLabel.textColor = .black
+        emojiTitleLabel.textColor = .label
     }
     
     private func setupColorTitleLabel() {
         colorTitleLabel.font = .systemFont(ofSize: 19, weight: .bold)
-        colorTitleLabel.text = "Цвет"
-        colorTitleLabel.textColor = .black
+        colorTitleLabel.text = NSLocalizedString("newTracker.colorLabel", comment: "")
+        colorTitleLabel.textColor = .label
     }
     
     // MARK: - Layout
@@ -253,7 +294,10 @@ final class NewTrackerViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            completedCountLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+            completedCountLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            nameTextField.topAnchor.constraint(equalTo: completedCountLabel.bottomAnchor, constant: 38),
             nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.heightAnchor.constraint(equalToConstant: 75),
@@ -351,10 +395,58 @@ final class NewTrackerViewController: UIViewController {
             self?.onCategoryUpdated?()
         }
         
-        
         present(categoryVC, animated: true)
     }
     // MARK: -
+    
+    private func fillFieldsForEdit(_ tracker: Tracker) {
+        titleLabel.text = NSLocalizedString("editTracker.title", comment: "")
+        createButton.setTitle(NSLocalizedString("editTracker.save", comment: ""), for: .normal)
+        
+        nameTextField.text = tracker.name
+        selectedEmoji = tracker.emoji
+        selectedWeekDays = tracker.schedule
+        
+        if let index = colors.firstIndex(where: { $0.toHexString() == tracker.color }) {
+            selectedColorIndex = index
+        }
+        
+        if let context = AppDelegate.context {
+            let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+            request.predicate = NSPredicate(format: "title == %@", tracker.categoryTitle)
+            
+            if let category = try? context.fetch(request).first {
+                selectedCategory = category
+                categoryDescriptionLabel.text = category.title
+                categoryDescriptionLabel.isHidden = false
+            }
+        }
+        
+        let completedCount = recordStore.getCompletedCount(for: tracker.id)
+        if completedCount > 0 {
+            completedCountLabel.text = String.localizedDays(completedCount)
+            completedCountLabel.isHidden = false
+            completedCountLabelHeightConstraint.constant = 38
+            completedCountLabelTopConstraint.constant = 38
+        } else {
+            completedCountLabel.isHidden = true
+            completedCountLabelHeightConstraint.constant = 0
+            completedCountLabelTopConstraint.constant = 0
+        }
+        
+        updateScheduleLabel()
+        emojiCollectionView.reloadData()
+        colorCollectionView.reloadData()
+        updateCreateButtonState()
+        
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func configureForEdit(tracker: Tracker) {
+        trackerToEdit = tracker
+    }
     
     private func makeEmojiLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
@@ -404,8 +496,8 @@ final class NewTrackerViewController: UIViewController {
     }
     
     @objc private func scheduleButtonTapped() {
-        let scheduleVc = ScheduleViewController()
-        scheduleVc.onDone = {[weak self] selectedDays in
+        let scheduleVc = ScheduleViewController(selectedDays: Set(selectedWeekDays))
+        scheduleVc.onDone = { [weak self] selectedDays in
             self?.selectedWeekDays = selectedDays.sorted { $0.rawValue < $1.rawValue }
             self?.updateScheduleLabel()
             self?.updateCreateButtonState()
@@ -418,6 +510,7 @@ final class NewTrackerViewController: UIViewController {
         }
         present(scheduleVc, animated: true)
     }
+
     
     private func updateScheduleLabel() {
         guard !selectedWeekDays.isEmpty else {
@@ -452,8 +545,11 @@ final class NewTrackerViewController: UIViewController {
         scheduleButton.configuration = config
     }
     
-    
     @objc private func createButtonTapped() {
+        if let oldTracker = trackerToEdit {
+            updateExistingTracker(oldTracker)
+            return
+        }
         guard let name = nameTextField.text, !name.isEmpty,
               !selectedWeekDays.isEmpty,
               let selectedEmoji = selectedEmoji,
@@ -481,6 +577,25 @@ final class NewTrackerViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    private func updateExistingTracker(_ old: Tracker) {
+        guard let name = nameTextField.text,
+              let emoji = selectedEmoji,
+              let colorIndex = selectedColorIndex,
+              let category = selectedCategory else { return }
+        
+        let updated = Tracker(
+            id: old.id,
+            name: name,
+            color: colors[colorIndex].toHexString(),
+            emoji: emoji,
+            schedule: selectedWeekDays,
+            categoryTitle: category.title ?? old.categoryTitle
+        )
+        
+        onUpdate?(updated)
+        dismiss(animated: true)
+    }
+    
     private func updateCreateButtonState() {
         let isNameValid = !(nameTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
         let hasSelectedDays = !selectedWeekDays.isEmpty
@@ -491,7 +606,9 @@ final class NewTrackerViewController: UIViewController {
         let isEnabled = isNameValid && hasSelectedDays && hasEmoji && hasColor && hasCategory
         
         createButton.isEnabled = isEnabled
-        createButton.backgroundColor = isEnabled ? .black : .systemGray
+        createButton.backgroundColor = isEnabled
+                ? Colors.createButtonEnabled
+                : Colors.createButtonDisabled
     }
     
 }

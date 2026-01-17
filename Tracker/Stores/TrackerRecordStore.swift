@@ -103,4 +103,17 @@ final class TrackerRecordStore: NSObject {
         do { return try context.count(for: fetch) }
         catch { return 0 }
     }
+    
+    func deleteAllRecords(for trackerID: UUID) {
+        let request: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "tracker.id == %@", trackerID as CVarArg)
+
+        do {
+            let records = try context.fetch(request)
+            records.forEach { context.delete($0) }
+            try context.save()
+        } catch {
+            print("Ошибка удаления записей трекера: \(error)")
+        }
+    }
 }

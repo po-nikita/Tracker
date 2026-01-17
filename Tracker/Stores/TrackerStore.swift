@@ -80,7 +80,7 @@ final class TrackerStore: NSObject {
                     schedule = (try? decoder.decode([Weekday].self, from: scheduleData)) ?? []
                 }
                 
-                let categoryTitle = trackerEntity.category?.title ?? "Без категории"
+                let categoryTitle = trackerEntity.category?.title ?? NSLocalizedString("category.title.noCategory", comment: "no category for category title")
                 
                 let tracker = Tracker(
                     id: id,
@@ -99,6 +99,47 @@ final class TrackerStore: NSObject {
         } catch {
             print("Ошибка загрузки трекеров: \(error)")
             return []
+        }
+    }
+    
+    func deleteTracker(id: UUID) {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+
+        do {
+            if let tracker = try context.fetch(request).first {
+                context.delete(tracker)
+                try context.save()
+            }
+        } catch {
+            print("Ошибка удаления трекера: \(error)")
+        }
+    }
+    
+    func updateTracker(_ tracker: Tracker) {
+        let request: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+
+        do {
+            if let entity = try context.fetch(request).first {
+                entity.name = tracker.name
+                entity.color = tracker.color
+                entity.emoji = tracker.emoji
+
+                let encoder = JSONEncoder()
+                entity.schedule = try encoder.encode(tracker.schedule)
+
+                let categoryRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+                categoryRequest.predicate = NSPredicate(format: "title == %@", tracker.categoryTitle)
+                
+                if let category = try context.fetch(categoryRequest).first {
+                    entity.category = category
+                }
+
+                try context.save()
+            }
+        } catch {
+            print("Ошибка обновления трекера: \(error)")
         }
     }
 }

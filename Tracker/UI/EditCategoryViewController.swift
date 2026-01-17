@@ -19,28 +19,27 @@ final class EditCategoryViewController: UIViewController {
     required init?(coder: NSCoder) { nil }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         let titleLabel = UILabel()
-        titleLabel.text = "Редактировать категорию"
+        titleLabel.text = NSLocalizedString("editCategory.title", comment: "")
         titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
         textField.text = categoryTitle
-        textField.backgroundColor = .systemGray6
+        textField.backgroundColor = .secondarySystemBackground
         textField.layer.cornerRadius = 16
         textField.setLeftPadding(16)
-        textField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
+        
         textField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textField)
         
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.isEnabled = false
-        doneButton.backgroundColor = .systemGray
+        doneButton.setTitle(NSLocalizedString("editCategory.done", comment: ""), for: .normal)
         doneButton.layer.cornerRadius = 16
         doneButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
-        doneButton.tintColor = .white
+        applyDoneButtonStyle(isEnabled: true)
+
         doneButton.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(doneButton)
@@ -61,15 +60,23 @@ final class EditCategoryViewController: UIViewController {
         ])
     }
     
-    @objc private func textChanged() {
-        let text = textField.text ?? ""
-        doneButton.isEnabled = !text.isEmpty && text != categoryTitle
-        doneButton.backgroundColor = doneButton.isEnabled ? .black : .systemGray
-    }
-    
     @objc private func doneTapped() {
-        guard let text = textField.text, !text.isEmpty else { return }
+        let text = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        guard !text.isEmpty else { return }
         completion(text)
         dismiss(animated: true)
     }
+    
+    private func applyDoneButtonStyle(isEnabled: Bool) {
+        doneButton.isEnabled = isEnabled
+
+        if isEnabled {
+            doneButton.backgroundColor = Colors.buttonEnabled
+            doneButton.setTitleColor(Colors.buttonEnabledText, for: .normal)
+        } else {
+            doneButton.backgroundColor = Colors.buttonDisabled
+            doneButton.setTitleColor(Colors.buttonDisabledText, for: .normal)
+        }
+    }
+
 }

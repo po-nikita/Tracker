@@ -16,7 +16,7 @@ final class CategoryCell: UITableViewCell {
     required init?(coder: NSCoder) { nil }
     
     private func setup() {
-        contentView.backgroundColor = .systemGray6
+        contentView.backgroundColor = .secondarySystemBackground
         backgroundColor = .clear
         selectionStyle = .none
         
@@ -27,7 +27,7 @@ final class CategoryCell: UITableViewCell {
         checkmark.image = UIImage(systemName: "checkmark")
         checkmark.tintColor = .systemBlue
         
-        separator.backgroundColor = .systemGray4
+        separator.backgroundColor = Colors.separatorColor
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(checkmark)

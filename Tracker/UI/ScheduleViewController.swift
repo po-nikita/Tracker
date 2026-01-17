@@ -1,18 +1,26 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController {
-    private var selectedWeekDays: Set<Weekday> = [] // Хранение выбранных дней
-    var onDone: ((Set<Weekday>) -> Void)? // при нажатии передает выбранные дни
+    private var selectedWeekDays: Set<Weekday>
+    var onDone: ((Set<Weekday>) -> Void)?
     
     private let doneButton = UIButton()
     private let titleLabel = UILabel()
-    private let tableView = UITableView(frame: .zero, style: .plain) // таблица со стилем
-    private let weekdays = Weekday.allCases // массив всех дней недели
+    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let weekdays = Weekday.allCases
+    
+    init(selectedDays: Set<Weekday> = []) {
+        self.selectedWeekDays = selectedDays
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Расписание"
+        view.backgroundColor = .systemBackground
+        title = NSLocalizedString("schedule.title", comment: "")
         setupTableView()
         setupTitle()
         setupDoneButton()
@@ -20,8 +28,9 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupTitle() {
-        titleLabel.text = "Расписание"
+        titleLabel.text = NSLocalizedString("schedule.title", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -32,18 +41,17 @@ final class ScheduleViewController: UIViewController {
         view.addSubview(tableView)
         
         tableView.isScrollEnabled = false
-        tableView.backgroundColor = .systemGray5
-        tableView.dataSource = self // Контроллер отвечает за данные таблицы.
-        tableView.delegate = self // Контроллер отвечает за поведение таблицы.
+        tableView.backgroundColor = .secondarySystemBackground
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.rowHeight = 75
-        tableView.register(WeekdayCell.self, forCellReuseIdentifier: WeekdayCell.reuseIdentifier) //Регистрируем кастомную ячейку.
+        tableView.register(WeekdayCell.self, forCellReuseIdentifier: WeekdayCell.reuseIdentifier)
         
         tableView.tableFooterView = UIView()
         tableView.layer.cornerRadius = 16
         tableView.clipsToBounds = true
         
-        tableView.separatorStyle = .singleLine
-        tableView.separatorColor = .systemGray
+        tableView.separatorColor = Colors.separatorColorGray
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
@@ -52,9 +60,9 @@ final class ScheduleViewController: UIViewController {
     }
     
     private func setupDoneButton() {
-        doneButton.setTitle("Готово", for: .normal)
-        doneButton.setTitleColor(.white, for: .normal)
-        doneButton.backgroundColor = .black
+        doneButton.setTitle(NSLocalizedString("schedule.doneButton.title", comment: ""), for: .normal)
+        doneButton.setTitleColor(UIColor { $0.userInterfaceStyle == .dark ? .black : .white }, for: .normal)
+        doneButton.backgroundColor = .label
         doneButton.layer.cornerRadius = 16
         doneButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +88,7 @@ final class ScheduleViewController: UIViewController {
         ])
     }
     
-    @objc private func doneButtonTapped() { // при нажатии на готово передает замыкание с выбранными днями
+    @objc private func doneButtonTapped() { 
         onDone?(selectedWeekDays)
         dismiss(animated: true)
     }
@@ -92,24 +100,25 @@ extension ScheduleViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WeekdayCell.reuseIdentifier, for: indexPath) as? WeekdayCell else {
             return UITableViewCell()
         }
         
-        let day = weekdays[indexPath.row] // Получаем конкретный день по индексу строки.
-        let isOn = selectedWeekDays.contains(day) // Проверяем: выбран ли этот день.
+        let day = weekdays[indexPath.row]
+        let isOn = selectedWeekDays.contains(day)
         
-        cell.configure(day: day, isOn: isOn) //Настраиваем ячейку.
+        cell.configure(day: day, isOn: isOn)
         
-        cell.onSwitchChanged = { [weak self] isOn in // Подписываемся на переключение switch.
-            
-            guard let self else {return}
+        cell.onSwitchChanged = { [weak self] isOn in
+            guard let self else { return }
             if isOn {
                 self.selectedWeekDays.insert(day)
-            }else {
+            } else {
                 self.selectedWeekDays.remove(day)
             }
         }
+        
         return cell
     }
     

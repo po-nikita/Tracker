@@ -4,7 +4,7 @@ final class TrackerCell: UICollectionViewCell {
     static let reuseIdentifier = "TrackerCell"
     
     // MARK: UI
-    private let cardView = UIView()
+    let cardView = UIView()
     private let emojiLabel = UILabel()
     private let titleLabel = UILabel()
     
@@ -91,22 +91,30 @@ final class TrackerCell: UICollectionViewCell {
         titleLabel.text = tracker.name
         emojiLabel.text = tracker.emoji
         cardView.backgroundColor = UIColor(hex: tracker.color)
-        daysLabel.text = "\(completedCount) \(dayWord(for: completedCount))"
+        
+        titleLabel.textColor = .white
+        daysLabel.textColor = .label
+        daysLabel.text = String.localizedDays(completedCount)
         
         let imageName = isCompleted ? "checkmark" : "plus"
         actionButton.setImage(UIImage(systemName: imageName), for: .normal)
-        actionButton.backgroundColor = .systemGreen
+        actionButton.backgroundColor = UIColor(hex: tracker.color)
+        
+        actionButton.tintColor = traitCollection.userInterfaceStyle == .dark ? .black : .white
     }
-    
-    private func dayWord(for count: Int) -> String {
-        if count % 10 == 1 && count % 100 != 11 {
-            return "день"
-        }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
         
-        if (2...4).contains(count % 10) && !(12...14).contains(count % 100) {
-            return "дня"
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            actionButton.tintColor = traitCollection.userInterfaceStyle == .dark ? .black : .white
         }
-        
-        return "дней"
+    }
+
+}
+
+extension String {
+    static func localizedDays(_ count: Int) -> String {
+        let format = NSLocalizedString("days_count", comment: "")
+        return String(format: format, count)
     }
 }

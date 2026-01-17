@@ -5,12 +5,12 @@ final class OnboardingPageViewController: UIPageViewController {
     private let pages: [OnboardingPage] = [
         OnboardingPage(
             backgroundImage: UIImage(named: "background_1"),
-            title: "Отслеживайте только \n то, что хотите"
+            title: NSLocalizedString("onboardingPage.firstTitle", comment: "")
             
         ),
         OnboardingPage(
             backgroundImage: UIImage(named: "background_2"),
-            title: "Даже если это \n не литры воды и йога"
+            title: NSLocalizedString("onboardingPage.secondTitle", comment: "")
         )
     ]
     
@@ -26,7 +26,7 @@ final class OnboardingPageViewController: UIPageViewController {
     
     private let actionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboardingPage.button.title", comment: ""), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black

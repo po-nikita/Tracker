@@ -17,28 +17,30 @@ final class NewCategoryViewController: UIViewController {
     required init?(coder: NSCoder) { nil }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         let titleLabel = UILabel()
-        titleLabel.text = "Новая категория"
+        titleLabel.text = NSLocalizedString("newCategory.title", comment: "")
         titleLabel.font = .boldSystemFont(ofSize: 16)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         
-        textField.placeholder = "Введите название категории"
+        textField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("newCategory.placeholder", comment: ""),
+            attributes: [.foregroundColor: UIColor.secondaryLabel])
+        
         textField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
-        textField.backgroundColor = .systemGray6
+        textField.backgroundColor = UIColor.secondarySystemBackground
         textField.layer.cornerRadius = 16
         textField.setLeftPadding(16)
         textField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(textField)
         
-        addButton.setTitle("Готово", for: .normal)
+        addButton.setTitle(NSLocalizedString("newCategory.done", comment: ""), for: .normal)
         addButton.isEnabled = false
-        addButton.backgroundColor = .systemGray
+        applyAddButtonStyle(isEnabled: false)
         addButton.layer.cornerRadius = 16
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .medium)
-        addButton.tintColor = .white
         addButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         addButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(addButton)
@@ -59,9 +61,21 @@ final class NewCategoryViewController: UIViewController {
         ])
     }
     
+    private func applyAddButtonStyle(isEnabled: Bool) {
+        addButton.isEnabled = isEnabled
+
+        if isEnabled {
+            addButton.backgroundColor = Colors.buttonEnabled
+            addButton.setTitleColor(Colors.buttonEnabledText, for: .normal)
+        } else {
+            addButton.backgroundColor = Colors.buttonDisabled
+            addButton.setTitleColor(Colors.buttonDisabledText, for: .normal)
+        }
+    }
+
     @objc private func textChanged() {
-        addButton.isEnabled = !(textField.text?.isEmpty ?? true)
-        addButton.backgroundColor = .black
+        let isEnabled = !(textField.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true)
+        applyAddButtonStyle(isEnabled: isEnabled)
     }
     
     @objc private func addTapped() {

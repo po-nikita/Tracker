@@ -36,7 +36,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: - Setup Views
     
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         [titleLabel, emptyImage, emptyLabel, containerView, addButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -47,16 +47,18 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func setupTitleLabel() {
-        titleLabel.text = "Категория"
+        titleLabel.text = NSLocalizedString("category.titleLabel", comment: "")
         titleLabel.font = .systemFont(ofSize: 16, weight: .medium)
         titleLabel.textAlignment = .center
+        titleLabel.textColor = .label
     }
     
     private func setupEmptyLabel() {
-        emptyLabel.text = "Привычки и события можно \nобъединить по смыслу"
+        emptyLabel.text = NSLocalizedString("category.emptyLabel", comment: "")
         emptyLabel.numberOfLines = 0
         emptyLabel.textAlignment = .center
         emptyLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        emptyLabel.textColor = .label
     }
     
     private func setupEmptyImage() {
@@ -64,9 +66,14 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func setupAddButton() {
-        addButton.setTitle("Добавить категорию", for: .normal)
-        addButton.setTitleColor(.white, for: .normal)
-        addButton.backgroundColor = .black
+        addButton.setTitle(NSLocalizedString("category.button.addCategory", comment: ""), for: .normal)
+        addButton.backgroundColor = Colors.createButtonEnabled
+            addButton.setTitleColor(
+                UIColor { trait in
+                    trait.userInterfaceStyle == .dark ? .black : .white
+                },
+                for: .normal
+            )
         addButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         addButton.layer.cornerRadius = 16
         addButton.addTarget(self, action: #selector(addCategoryTapped), for: .touchUpInside)
@@ -83,7 +90,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
         tableView.rowHeight = 75
         tableView.alwaysBounceVertical = true
         
-        containerView.backgroundColor = .systemGray6
+        containerView.backgroundColor = .secondarySystemBackground
         containerView.layer.cornerRadius = 16
         containerView.clipsToBounds = true
     }
@@ -199,17 +206,17 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        alert.addAction(UIAlertAction(title: "Редактировать", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.edit", comment: ""), style: .default) { [weak self] _ in
             self?.presentEditCategory(category)
             blurView.removeFromSuperview()
         })
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.delete", comment: ""), style: .destructive) { [weak self] _ in
             self?.presentDeleteCategory(category)
             blurView.removeFromSuperview()
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel) { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.cancel", comment: ""), style: .cancel) { _ in
             blurView.removeFromSuperview()
         })
         
@@ -240,9 +247,9 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func presentDeleteCategory(_ category: TrackerCategoryCoreData) {
-        let alert = UIAlertController(title: "Удалить категорию?", message: "Все данные категории будут удалены.", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: NSLocalizedString("category.alert.deleteTitle", comment: ""), message: NSLocalizedString("category.alert.message", comment: ""), preferredStyle: .actionSheet)
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.delete", comment: ""), style: .destructive) { [weak self] _ in
             guard let context = category.managedObjectContext else { return }
             
             if let trackers = category.trackers as? Set<TrackerCoreData> {
@@ -268,7 +275,7 @@ final class CategoryViewController: UIViewController, UITableViewDelegate, UITab
             }
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("category.alert.cancel", comment: ""), style: .cancel))
         present(alert, animated: true)
     }
     
